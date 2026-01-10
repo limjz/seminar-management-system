@@ -18,6 +18,7 @@ public class CreateSession extends JFrame {
     JLabel dateLabel = new JLabel("Date");
     JLabel timeLabel = new JLabel("Time");
     JLabel venueLabel = new JLabel("Venue");
+    JLabel typeLabel = new JLabel("Sesion Type");
 
     // text fields for session details
     JTextField titleField = new JTextField(20);
@@ -25,6 +26,10 @@ public class CreateSession extends JFrame {
     JTextField timeField = new JTextField(20);
     JTextField venueField = new JTextField(20);  
     
+    // choosing option for the type of the seminar session 
+    String [] typeOptions = {"Oral", "Poster"}; 
+    JComboBox <String> sessionTypeOption = new JComboBox<>(typeOptions);
+
 
     JPanel buttonPanel = new JPanel (new FlowLayout(FlowLayout.CENTER, 20, 10));
     // add Create Session button
@@ -36,30 +41,32 @@ public class CreateSession extends JFrame {
     // click button action
     createSessionButton.addActionListener(e -> {
       //get info from text fields
-      String v = venueField.getText(); 
-      String n = titleField.getText(); 
-      String d = dateField.getText();
-      String t = timeField.getText();
+      String name = titleField.getText();
+      String date = dateField.getText();  
+      String time = timeField.getText();
+      String venue = venueField.getText(); 
+      String type = sessionTypeOption.getSelectedItem().toString();
 
       // call controller to create session and store in database
-      boolean successCreate = CoordinatorController.createSession(n, d, t, v);
+      boolean successCreate = CoordinatorController.createSession(name, date, time, venue, type);
 
       if (successCreate)
       {
+        //pop out message
         JOptionPane.showMessageDialog(this, "Session Created Successfully!");
 
-        //set the text field to empty// manual refresh
+        //set the text field to empty and first option// manual refresh
         titleField.setText("");
         dateField.setText("");
         timeField.setText("");
         venueField.setText("");
+        sessionTypeOption.setSelectedItem("Oral");
       }
     });
 
+    // close current page 
     backButton.addActionListener(e ->{
-      
       dispose();
-
     });
 
     // add components to panel
@@ -71,6 +78,10 @@ public class CreateSession extends JFrame {
     formPanel.add(timeField);
     formPanel.add(venueLabel);
     formPanel.add(venueField);
+
+    formPanel.add (typeLabel);
+    formPanel.add (sessionTypeOption);
+
     buttonPanel.add (backButton);
     buttonPanel.add(createSessionButton);
 
