@@ -1,16 +1,16 @@
 package views;
 
 import controllers.CoordinatorController;
-import java.awt.GridLayout;
+import java.awt.*;
 import javax.swing.*;
 
 public class CreateSession extends JFrame {
   
   public CreateSession() {
     super("Create Session");
-    JPanel panel = new JPanel();
+    JPanel formPanel = new JPanel();
     
-    panel.setLayout(new GridLayout(0,1,10,10));
+    formPanel.setLayout(new GridLayout(0,1,10,10));
     setSize(500, 400);
     
     // labels for session details
@@ -26,10 +26,12 @@ public class CreateSession extends JFrame {
     JTextField venueField = new JTextField(20);  
     
 
-
+    JPanel buttonPanel = new JPanel (new FlowLayout(FlowLayout.CENTER, 20, 10));
     // add Create Session button
     JButton createSessionButton = new JButton("Create Session");
-    panel.add(createSessionButton);
+    // add Back button
+    JButton backButton = new JButton ("Back"); 
+
 
     // click button action
     createSessionButton.addActionListener(e -> {
@@ -54,20 +56,30 @@ public class CreateSession extends JFrame {
       }
     });
 
+    backButton.addActionListener(e ->{
+      
+      dispose();
+
+    });
+
     // add components to panel
-    panel.add(titleLabel);
-    panel.add(titleField);
-    panel.add(dateLabel);
-    panel.add(dateField);
-    panel.add(timeLabel);
-    panel.add(timeField);
-    panel.add(venueLabel);
-    panel.add(venueField);
-    panel.add(createSessionButton);
+    formPanel.add(titleLabel);
+    formPanel.add(titleField);
+    formPanel.add(dateLabel);
+    formPanel.add(dateField);
+    formPanel.add(timeLabel);
+    formPanel.add(timeField);
+    formPanel.add(venueLabel);
+    formPanel.add(venueField);
+    buttonPanel.add (backButton);
+    buttonPanel.add(createSessionButton);
 
-    panel.setBorder( BorderFactory.createEmptyBorder(20,20,20,20));
+    formPanel.setBorder( BorderFactory.createEmptyBorder(20,20,20,20));
 
-    add(panel);
+    // the filling text field will be on the top of the two button
+    add(formPanel, BorderLayout.CENTER);
+    add(buttonPanel, BorderLayout.SOUTH);
+
     setDefaultCloseOperation(EXIT_ON_CLOSE);
 
   }
