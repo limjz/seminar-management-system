@@ -3,6 +3,7 @@ package views;
 import controllers.CoordinatorController;
 import java.awt.*;
 import javax.swing.*;
+import utils.Config;
 
 public class CreateSession extends JFrame {
   
@@ -11,7 +12,7 @@ public class CreateSession extends JFrame {
     JPanel formPanel = new JPanel();
     
     formPanel.setLayout(new GridLayout(0,1,10,10));
-    setSize(500, 400);
+    setSize(Config.WINDOW_WIDTH, Config.WINDOW_HEIGHT);
     
     // labels for session details
     JLabel titleLabel = new JLabel("Session Title");
