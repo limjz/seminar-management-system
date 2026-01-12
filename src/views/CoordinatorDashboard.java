@@ -1,12 +1,13 @@
 package views;
 
 import javax.swing.*;
+import utils.Config;
 
 public class CoordinatorDashboard extends JFrame {
   public CoordinatorDashboard() {
     super("Coordinator Dashboard");
     JPanel panel = new JPanel();
-    setSize(500, 400);
+    setSize(Config.WINDOW_WIDTH, Config.WINDOW_HEIGHT);
 
 
     //button 
