@@ -14,11 +14,22 @@ public class CoordinatorDashboard extends JFrame {
     JButton createNewSessionButton = new JButton("Create New Session");
     panel.add(createNewSessionButton); 
 
-    createNewSessionButton.addActionListener((actionEvent) -> {
+    createNewSessionButton.addActionListener(e -> {
 
       CreateSession CS = new CreateSession();
       CS.setVisible(true);
     });
+
+    JButton assignSessionButton = new JButton ("Assign Session");
+    panel.add(assignSessionButton);
+
+    assignSessionButton.addActionListener(e->{ 
+
+      AssignSessionPage AS = new AssignSessionPage();
+      AS.setVisible(true);
+
+    });
+
 
     add(panel); 
     setDefaultCloseOperation(EXIT_ON_CLOSE);

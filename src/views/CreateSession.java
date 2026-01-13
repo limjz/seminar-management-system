@@ -92,7 +92,7 @@ public class CreateSession extends JFrame {
     add(formPanel, BorderLayout.CENTER);
     add(buttonPanel, BorderLayout.SOUTH);
 
-    setDefaultCloseOperation(EXIT_ON_CLOSE);
+    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
   }
 
