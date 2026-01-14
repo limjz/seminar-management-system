@@ -15,10 +15,11 @@ public class LoginPage extends JFrame{
         super ("Login");
 
         JPanel pagePanel = new JPanel();
-        pagePanel.setLayout( new GridLayout(3,2, 10, 10)); // grid layout
         setSize(Config.WINDOW_WIDTH, Config.WINDOW_HEIGHT/2);
+        setLocationRelativeTo(null);
 
-
+        pagePanel.setLayout( new GridLayout(3,2, 10, 10)); // grid layout
+        
         //labels 
         JLabel userLabel = new JLabel("Username:");
         JLabel pwdLabel = new JLabel("Password:");
