@@ -16,7 +16,7 @@ public class SessionController {
     for (String lines : allLines)
     { 
       Session s = Session.fromFileLine(lines);
-      if (s != null)
+      if (s != null) // if read smtg then add to the list
       { 
         sessionList.add(s);
       }
@@ -25,7 +25,7 @@ public class SessionController {
     return sessionList;
   }
 
-
+  // search ID can know which data 
   public Session getSessionByID (String id)
   {
     List<Session> allSession = getAllSession(); 
@@ -33,18 +33,11 @@ public class SessionController {
     for (Session s : allSession)
     { 
       if(s.getSessionID().equals(id))
-        return s;
+        return s; // here s is direct to one line of data 
     }
 
     return null;
   }
 
-  public Session updateSession () 
-  { 
-
-
-    
-    return null; 
-  }
 
 }

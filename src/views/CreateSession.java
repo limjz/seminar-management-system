@@ -3,36 +3,51 @@ package views;
 import controllers.CoordinatorController;
 import java.awt.*;
 import javax.swing.*;
+import models.DateSelector;
 import utils.Config;
 
 public class CreateSession extends JFrame {
   
+
+  private final JTextField titleField; 
+  private final DateSelector sessionDateBox;
+  //private final JTextField dateField;
+  private final JTextField timeField;
+  private final JComboBox <String> sessionVenueBox;
+  private final JComboBox <String> sessionTypeBox;
+
+
   public CreateSession() {
     super("Create Session");
-    JPanel formPanel = new JPanel();
-    
-    formPanel.setLayout(new GridLayout(0,1,10,10));
     setSize(Config.WINDOW_WIDTH, Config.WINDOW_HEIGHT);
-    
+   
+
+    JPanel formPanel = new JPanel(new GridLayout(0,1,10, 10));  
+    JPanel buttonPanel = new JPanel (new FlowLayout(FlowLayout.CENTER, 20, 10));
+
     // labels for session details
     JLabel titleLabel = new JLabel("Session Title");
-    JLabel dateLabel = new JLabel("Date");
+    JLabel dateLabel = new JLabel("Date (YYYY-MM-DD)");
     JLabel timeLabel = new JLabel("Time");
     JLabel venueLabel = new JLabel("Venue");
     JLabel typeLabel = new JLabel("Sesion Type");
 
     // text fields for session details
-    JTextField titleField = new JTextField(20);
-    JTextField dateField = new JTextField(20);
-    JTextField timeField = new JTextField(20);
-    JTextField venueField = new JTextField(20);  
-    
-    // choosing option for the type of the seminar session 
+    titleField = new JTextField(20);
+    timeField = new JTextField(20);
+   
+
+
+    // choosing option for the date, venue and type of the seminar session 
+    sessionDateBox = new DateSelector();
+
+    String [] venueOption = {"DTC", "MPH", "FCI classroom", "FCM classroom"};
+    sessionVenueBox = new JComboBox<>(venueOption);
+
     String [] typeOptions = {"Oral", "Poster"}; 
-    JComboBox <String> sessionTypeOption = new JComboBox<>(typeOptions);
+    sessionTypeBox = new JComboBox<>(typeOptions);
 
 
-    JPanel buttonPanel = new JPanel (new FlowLayout(FlowLayout.CENTER, 20, 10));
     // add Create Session button
     JButton createSessionButton = new JButton("Create Session");
     // add Back button
@@ -41,12 +56,56 @@ public class CreateSession extends JFrame {
 
     // click button action
     createSessionButton.addActionListener(e -> {
-      //get info from text fields
+      
+      saveSession();
+
+    });
+
+    // close current page 
+    backButton.addActionListener(e ->{
+      dispose();
+      Config.setCoordinatorDashboardVsible();
+    });
+
+    // add components to panel
+    formPanel.add(titleLabel);
+    formPanel.add(titleField);
+
+    formPanel.add(dateLabel);
+    //formPanel.add(dateField);
+    formPanel.add(sessionDateBox);
+
+    formPanel.add(timeLabel);
+    formPanel.add(timeField);
+    formPanel.add(venueLabel);
+    formPanel.add(sessionVenueBox);
+
+    formPanel.add (typeLabel);
+    formPanel.add (sessionTypeBox);
+
+    buttonPanel.add (backButton);
+    buttonPanel.add(createSessionButton);
+
+    formPanel.setBorder( BorderFactory.createEmptyBorder(20,20,20,20));
+
+    // the filling text field will be on the top of the two button
+    add(formPanel, BorderLayout.CENTER);
+    add(buttonPanel, BorderLayout.SOUTH);
+
+    //pack();
+    setLocationRelativeTo(null);
+    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+  }
+
+  private void saveSession () 
+  { 
+    //get info from text fields
       String name = titleField.getText();
-      String date = dateField.getText();  
+      String date = sessionDateBox.getSelectedDate_String();  
       String time = timeField.getText();
-      String venue = venueField.getText(); 
-      String type = sessionTypeOption.getSelectedItem().toString();
+      String venue = sessionVenueBox.getSelectedItem().toString(); 
+      String type = sessionTypeBox.getSelectedItem().toString();
 
       // call controller to create session and store in database
       boolean successCreate = CoordinatorController.createSession(name, date, time, venue, type);
@@ -58,42 +117,11 @@ public class CreateSession extends JFrame {
 
         //set the text field to empty and first option// manual refresh
         titleField.setText("");
-        dateField.setText("");
         timeField.setText("");
-        venueField.setText("");
-        sessionTypeOption.setSelectedItem("Oral");
+        //sessionVenueBox.setSelectedItem("");
+        //sessionTypeBox.setSelectedItem("");
       }
-    });
-
-    // close current page 
-    backButton.addActionListener(e ->{
-      dispose();
-    });
-
-    // add components to panel
-    formPanel.add(titleLabel);
-    formPanel.add(titleField);
-    formPanel.add(dateLabel);
-    formPanel.add(dateField);
-    formPanel.add(timeLabel);
-    formPanel.add(timeField);
-    formPanel.add(venueLabel);
-    formPanel.add(venueField);
-
-    formPanel.add (typeLabel);
-    formPanel.add (sessionTypeOption);
-
-    buttonPanel.add (backButton);
-    buttonPanel.add(createSessionButton);
-
-    formPanel.setBorder( BorderFactory.createEmptyBorder(20,20,20,20));
-
-    // the filling text field will be on the top of the two button
-    add(formPanel, BorderLayout.CENTER);
-    add(buttonPanel, BorderLayout.SOUTH);
-
-    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
   }
+
 
 }

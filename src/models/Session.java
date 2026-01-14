@@ -26,17 +26,6 @@ public class Session {
     this.presenter = presenter; 
   }
 
-
-  /* 
-   @Override 
-  public String toString()
-  { 
-    return 
-  }
-
-  */
- 
-
   //convert data from object to line string
   public String toFileLine (){
     return this.sessionID + Config.DELIMITER_WRITE + this.sessionName + Config.DELIMITER_WRITE + this.sessionDate + Config.DELIMITER_WRITE + this.sessionTime + Config.DELIMITER_WRITE + this.sessionVenue + Config.DELIMITER_WRITE + this.sessionType + Config.DELIMITER_WRITE + this.evaluator + Config.DELIMITER_WRITE + this.presenter;
@@ -50,7 +39,6 @@ public class Session {
     { 
       return null;
     }
-    
 
     String evaluator = "Unassigned";
     String presenter = "Unassigned";

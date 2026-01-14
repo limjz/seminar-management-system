@@ -19,7 +19,9 @@ public class AssignSessionPage extends JFrame{
   public AssignSessionPage() 
   { 
     super("Assign Session");
-    setSize (Config.WINDOW_WIDTH, Config.WINDOW_HEIGHT); 
+    //setSize (Config.WINDOW_WIDTH, Config.WINDOW_HEIGHT); 
+    
+    
     setLayout(new BorderLayout());
     JPanel boxPanel = new JPanel(new GridLayout(0, 2, 10, 20)); 
     JPanel buttonPanel = new JPanel();
@@ -52,6 +54,7 @@ public class AssignSessionPage extends JFrame{
     JButton backButton = new JButton ("Back"); 
     backButton.addActionListener(e -> {
       dispose();
+      Config.setCoordinatorDashboardVsible();
     });
 
     boxPanel.add(sessionLabel);
@@ -73,6 +76,9 @@ public class AssignSessionPage extends JFrame{
     add(boxPanel, BorderLayout.NORTH);
     add(buttonPanel, BorderLayout.SOUTH);
 
+    pack();
+
+    setLocationRelativeTo(null);
     setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
   }
 
