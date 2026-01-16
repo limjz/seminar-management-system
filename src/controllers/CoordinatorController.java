@@ -1,6 +1,6 @@
-package controllers;
+package controller;
 
-import models.Session;
+import model.Session;
 import utils.Config;
 import utils.FileHandler;
 

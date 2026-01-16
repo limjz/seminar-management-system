@@ -1,6 +1,6 @@
-package views;
+package view;
 
-import controllers.CoordinatorController;
+import controller.CoordinatorController;
 import java.awt.*;
 import javax.swing.*;
 
