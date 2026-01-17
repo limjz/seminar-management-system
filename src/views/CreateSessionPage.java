@@ -103,20 +103,29 @@ public class CreateSessionPage extends JDialog {
       String venue = sessionVenueBox.getSelectedItem().toString(); 
       String type = sessionTypeBox.getSelectedItem().toString();
 
-      // call controller to create session and store in database
-      boolean successCreate = SessionController.createSession(seminarID, name, date, time, venue, type);
-
-      if (successCreate)
+      if (name.isEmpty() && time.isEmpty())
       {
-        //pop out message
-        JOptionPane.showMessageDialog(this, "Session Created Successfully!");
+        JOptionPane.showMessageDialog(this, "Please fill all the required field!");
 
-        //set the text field to empty and first option// manual refresh
-        titleField.setText("");
-        timeField.setText("");
-        //sessionVenueBox.setSelectedItem("");
-        //sessionTypeBox.setSelectedItem("");
       }
+      else 
+      {
+        // call controller to create session and store in database
+        boolean successCreate = SessionController.createSession(seminarID, name, date, time, venue, type);
+
+        if (successCreate)
+        {
+          //pop out message
+          JOptionPane.showMessageDialog(this, "Session Created Successfully!");
+
+          //set the text field to empty and first option// manual refresh
+          titleField.setText("");
+          timeField.setText("");
+          //sessionVenueBox.setSelectedItem("");
+          //sessionTypeBox.setSelectedItem("");
+        }
+      }
+      
   }
 
 

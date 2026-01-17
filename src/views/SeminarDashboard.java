@@ -18,7 +18,9 @@ public class SeminarDashboard extends JFrame {
   private JButton backButton;
   private JButton createNewSessionButton;
   private JButton assignSessionButton;
+  private JButton deleteButton;
   private DefaultTableModel tableModel;
+  private JTable sessionTable;
   private String currentSeminarID = null;
 
 
@@ -117,7 +119,7 @@ public class SeminarDashboard extends JFrame {
     tableModel = new DefaultTableModel(titles, 0); // 0 means no row initially
    
     // display table 
-    JTable sessionTable = new JTable(tableModel); 
+    sessionTable = new JTable(tableModel); 
     sessionTable.setRowHeight(15);
 
     JScrollPane scrollPane = new JScrollPane(sessionTable);
@@ -133,6 +135,9 @@ public class SeminarDashboard extends JFrame {
     //back button
     backButton = new JButton("Back");
 
+    //delete session button 
+    deleteButton = new JButton("Delete");
+
     //create new sesssion button 
     createNewSessionButton = new JButton("Create New Session");
 
@@ -140,20 +145,42 @@ public class SeminarDashboard extends JFrame {
     assignSessionButton = new JButton ("Assign Session");
 
     buttonPanel.add(backButton);
+    buttonPanel.add(deleteButton);
     buttonPanel.add(createNewSessionButton);
     buttonPanel.add(assignSessionButton);
     
     add (buttonPanel, BorderLayout.SOUTH); 
 
     //--------------------------- Action listeners ----------------------------
+    
+    backButton.addActionListener(e-> {
+      dispose();
+      Config.setCoordinatorDashboardVsible();
+    });
+    
+    deleteButton.addActionListener(e->{
+      
+      String sessionID = (String) tableModel.getValueAt(sessionTable.getSelectedRow(), 0);
+      
+      SessionController SC = new SessionController();
+      if (SC.deleteSession(sessionID))
+      {
+        updateSessionTable();
+        JOptionPane.showMessageDialog(this, "Deleted Successfully");
+      }
+      else
+      {
+        JOptionPane.showMessageDialog(this, "Error: ID not found.");
+      }
+
+    });
+    
     createNewSessionButton.addActionListener(e -> {
 
       if(currentSeminarID == null)
       {
         return;
       }
-      
-
       CreateSessionPage CS = new CreateSessionPage(this, currentSeminarID);
       CS.setVisible(true);
       this.setVisible(false);
@@ -165,18 +192,9 @@ public class SeminarDashboard extends JFrame {
       AS.setVisible(true);
       this.setVisible(false);
 
-    });
-
-    backButton.addActionListener(e-> {
-      dispose();
-      Config.setCoordinatorDashboardVsible();
-    });
-    
+    });  
 
   }
-
-
-
 
 }
 

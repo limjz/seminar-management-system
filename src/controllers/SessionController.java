@@ -22,7 +22,10 @@ public class SessionController {
     return true;
   }
 
-
+  public static boolean deleteSession(String sessionID)
+  { 
+    return FileHandler.deleteData(Config.SESSIONS_FILE, sessionID);
+  }
 
   public List<Session> getAllSession ()
   { 
