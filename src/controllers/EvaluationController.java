@@ -1,27 +1,27 @@
-package controller;
-
-import model.Evaluation;
-import model.Submission;
-import utils.Config;
-import utils.FileHandler;
+package controllers;
 
 import java.util.ArrayList;
 import java.util.List;
+import models.Evaluation;
+import models.Submission;
+import utils.Config;
+import utils.FileHandler;
 
 public class EvaluationController {
 
     // 1) Get submissions assigned to evaluator (using assignments.txt)
     public static List<Submission> getAssignedSubmissions(String evaluatorId) {
 
-        List<String> assignmentLines = FileHandler.readAllLines(Config.ASSIGNMENTS_FILE);
+        List<String> sessionLines = FileHandler.readAllLines(Config.SESSIONS_FILE);
+        //List<String> assignmentLines = FileHandler.readAllLines(Config.ASSIGNMENTS_FILE);
         List<String> submissionLines = FileHandler.readAllLines(Config.SUBMISSIONS_FILE);
 
         // collect assigned submission IDs
         List<String> assignedIds = new ArrayList<>();
-        for (String line : assignmentLines) {
-            String[] parts = line.split(Config.DELIMITER_READ_REGEX, -1);
-            if (parts.length >= 2 && parts[0].equals(evaluatorId)) {
-                assignedIds.add(parts[1]);
+        for (String line : sessionLines) {
+            String[] parts = line.split(Config.DELIMITER_READ, -1);
+            if (parts.length >= 7 && parts[6].equals(evaluatorId)) {
+                assignedIds.add(parts[7]); // student ID
             }
         }
 
@@ -29,7 +29,7 @@ public class EvaluationController {
         List<Submission> result = new ArrayList<>();
         for (String line : submissionLines) {
             Submission s = Submission.fromFileLine(line);
-            if (s != null && assignedIds.contains(s.getSubmissionId())) {
+            if (s != null && assignedIds.contains(s.getStudentId())) {
                 result.add(s);
             }
         }

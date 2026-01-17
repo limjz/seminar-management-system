@@ -1,4 +1,4 @@
-package model;
+package models;
 
 import utils.Config;
 
@@ -29,7 +29,7 @@ public class Submission {
 
     // txt line -> object
     public static Submission fromFileLine(String line) {
-        String[] parts = line.split(Config.DELIMITER_READ_REGEX, -1);
+        String[] parts = line.split(Config.DELIMITER_READ, -1);
         if (parts.length < 5) return null;
         return new Submission(parts[0], parts[1], parts[2], parts[3], parts[4]);
     }

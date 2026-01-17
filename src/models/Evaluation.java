@@ -1,11 +1,12 @@
-package model;
+package models;
 
 import utils.Config;
 
 public class Evaluation {
 
-    private String submissionId;
     private String evaluatorId;
+    private String submissionId;
+    
 
     private int problemClarity;
     private int methodology;
@@ -14,11 +15,12 @@ public class Evaluation {
 
     private String comments;
 
-    public Evaluation(String submissionId, String evaluatorId,
+    public Evaluation(String evaluatorId, String submissionId, 
                       int problemClarity, int methodology, int results, int presentation,
                       String comments) {
-        this.submissionId = submissionId;
         this.evaluatorId = evaluatorId;
+        this.submissionId = submissionId;
+        
         this.problemClarity = problemClarity;
         this.methodology = methodology;
         this.results = results;
@@ -27,18 +29,19 @@ public class Evaluation {
     }
 
     public String toFileLine() {
-        return submissionId + Config.DELIMITER_WRITE +
-               evaluatorId + Config.DELIMITER_WRITE +
-               problemClarity + Config.DELIMITER_WRITE +
-               methodology + Config.DELIMITER_WRITE +
-               results + Config.DELIMITER_WRITE +
-               presentation + Config.DELIMITER_WRITE +
-               comments;
+        return 
+            evaluatorId + Config.DELIMITER_WRITE +
+            submissionId + Config.DELIMITER_WRITE +
+            problemClarity + Config.DELIMITER_WRITE +
+            methodology + Config.DELIMITER_WRITE +
+            results + Config.DELIMITER_WRITE +
+            presentation + Config.DELIMITER_WRITE +
+            comments;
     }
 
     public static Evaluation fromFileLine(String line) {
         // split into max 7 parts so comments can contain "|"? (we keep it simple)
-        String[] parts = line.split(Config.DELIMITER_READ_REGEX, 7);
+        String[] parts = line.split(Config.DELIMITER_READ, 7);
         if (parts.length < 7) return null;
 
         return new Evaluation(
@@ -62,8 +65,8 @@ public class Evaluation {
     }
 
     // getters
-    public String getSubmissionId() { return submissionId; }
     public String getEvaluatorId() { return evaluatorId; }
+    public String getSubmissionId() { return submissionId; }
     public int getProblemClarity() { return problemClarity; }
     public int getMethodology() { return methodology; }
     public int getResults() { return results; }

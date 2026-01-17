@@ -1,7 +1,9 @@
-package view;
+package delete;
 
-import javax.swing.*;
 import java.awt.*;
+import javax.swing.*;
+
+import views.EvaluationPage;
 
 public class LoginUI extends JFrame {
 
@@ -36,7 +38,7 @@ public class LoginUI extends JFrame {
         }
 
         // Open evaluation UI
-        new EvaluationUI(evaluatorId).setVisible(true);
+        new EvaluationPage(evaluatorId).setVisible(true);
         dispose();
     }
 

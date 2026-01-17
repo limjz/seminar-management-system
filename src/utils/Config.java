@@ -1,6 +1,6 @@
 package utils;
 
-import view.*;
+import views.*;
 
 public class Config {
   
@@ -17,7 +17,7 @@ public class Config {
 
   public static final String DELIMITER_READ = "\\|";
   public static final String DELIMITER_WRITE = "|";
-  public static final String DELIMITER_READ_REGEX = "\\|";
+
 
 
   public static void setCoordinatorDashboardVsible ()

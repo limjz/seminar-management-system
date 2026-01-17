@@ -1,33 +1,32 @@
-package view;
+package views;
 
-import controller.EvaluationController;
-import model.Evaluation;
-import model.Submission;
-
-import javax.swing.*;
+import controllers.EvaluationController;
 import java.awt.*;
 import java.util.List;
+import javax.swing.*;
+import models.Evaluation;
+import models.Submission;
 
-public class EvaluationUI extends JFrame {
+public class EvaluationPage extends JFrame {
 
-    private String evaluatorId;
+    private final String evaluatorId;
 
-    private DefaultListModel<String> listModel = new DefaultListModel<>();
-    private JList<String> listAssigned = new JList<>(listModel);
+    private final DefaultListModel<String> listModel = new DefaultListModel<>();
+    private final JList<String> listAssigned = new JList<>(listModel);
 
-    private JLabel lblSelected = new JLabel("Selected: -");
+    private final JLabel lblSelected = new JLabel("Selected: -");
 
-    private JSpinner spProblem = new JSpinner(new SpinnerNumberModel(0, 0, 5, 1));
-    private JSpinner spMethod  = new JSpinner(new SpinnerNumberModel(0, 0, 5, 1));
-    private JSpinner spResults = new JSpinner(new SpinnerNumberModel(0, 0, 5, 1));
-    private JSpinner spPresent = new JSpinner(new SpinnerNumberModel(0, 0, 5, 1));
+    private final JSpinner spProblem = new JSpinner(new SpinnerNumberModel(0, 0, 5, 1));
+    private final JSpinner spMethod  = new JSpinner(new SpinnerNumberModel(0, 0, 5, 1));
+    private final JSpinner spResults = new JSpinner(new SpinnerNumberModel(0, 0, 5, 1));
+    private final JSpinner spPresent = new JSpinner(new SpinnerNumberModel(0, 0, 5, 1));
 
-    private JTextArea txtComments = new JTextArea(6, 30);
+    private final JTextArea txtComments = new JTextArea(6, 30);
 
     private List<Submission> assignedSubmissions;
     private Submission selected;
 
-    public EvaluationUI(String evaluatorId) {
+    public EvaluationPage(String evaluatorId) {
         this.evaluatorId = evaluatorId;
 
         setTitle("Evaluation - " + evaluatorId);

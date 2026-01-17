@@ -1,6 +1,5 @@
-package main;
+package delete;
 
-import view.LoginUI;
 import javax.swing.SwingUtilities;
 
 public class MainEvaluator {

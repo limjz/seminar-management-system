@@ -1,4 +1,4 @@
-package model;
+package delete;
 
 public class User {
     protected String userID;

@@ -1,6 +1,6 @@
-package controller;
+package controllers;
 
-import model.Session;
+import models.Session;
 import utils.Config;
 import utils.FileHandler;
 
@@ -14,7 +14,7 @@ public class CoordinatorController {
     String sessionID = "SESSION-0" + newSessionID; //SESSION - 01, ...
 
     //create new session object and append to database
-    Session newSession = new Session(sessionID, sessionName, sessionDate, sessionTime, sessionVenue, sessionType, " ", " ");
+    Session newSession = new Session(sessionID, sessionName, sessionDate, sessionTime, sessionVenue, sessionType, "-", "-");
     FileHandler.appendData(Config.SESSIONS_FILE, newSession.toFileLine());
 
 
