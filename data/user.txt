@@ -1,0 +1,4 @@
+C001|cincau|12345|Coordinator
+S001|ali|11111|Student
+S002|agao|2222|Student
+E001|mutu|3333|Evaluator

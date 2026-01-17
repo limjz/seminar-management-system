@@ -6,14 +6,13 @@ import java.util.List;
 
 public class FileHandler {
   
-
-  public static List<String> readAllLines (String filename)
+  public static List<String> readAllLines (String filepath)
   {
     List<String> lines = new ArrayList<>();
-    File file = new File(filename);
+    File file = new File(filepath);
 
     if (!file.exists()) {
-      System.out.println("File not found: " + filename);
+      System.out.println("File not found: " + filepath);
       return lines;
     }
 
@@ -43,17 +42,43 @@ public class FileHandler {
     }
   }
 
-  // Update (overwrite) data in a file
-  public static void updateData (String filepath, String data)
-  {
-    try (BufferedWriter writer = new BufferedWriter(new FileWriter(filepath, false))) { //append = false meaning rewrite the file
-      writer.write(data);
-      writer.newLine();
+  public static void updateData (String filepath, String targetID, String newData)
+  { 
+    List <String> allLines = readAllLines(filepath); 
+    List <String> newLines = new ArrayList<>(); 
+    boolean found = false;
 
-    } catch (IOException e) {
-      System.err.println("Error updating file: " + e.getMessage());
+    for (String line : allLines)
+    { 
+      String [] parts = line.split (Config.DELIMITER_READ); 
+      if (parts[0].equals(targetID))
+      {
+        newLines.add(newData); // new data is the whole line, but not just the specific data object 
+        found = true; 
+      }
+      else 
+      {
+        newLines.add(line); // keep the original data line
+      }
     }
 
+    if (found)
+    { 
+      // write the whole list into file 
+      try (BufferedWriter writer = new BufferedWriter(new FileWriter(filepath, false))) { //append = false meaning rewrite the file
+      for (String line : newLines)
+      {
+        writer.write(line);
+        writer.newLine();
+      }
+      } catch (IOException e) {
+        System.err.println("Error updating file: " + e.getMessage());
+      }
+    }
+    else 
+    { 
+      System.out.println ("ID not found."); 
+    }
   }
 
   // Overwrite file with MANY lines (needed for update logic)
