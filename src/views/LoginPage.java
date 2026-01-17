@@ -36,7 +36,7 @@ public class LoginPage extends JFrame{
 
 
         loginButton.addActionListener(e -> {
-            String username = userText.getText(); 
+            String username = userText.getText().toUpperCase(); 
             String password = new String (pwdText.getPassword()); // getPassword returns char array
                                                                  // Convert char to string => new String(char[]
             User user = LoginController.authentication(username, password);
@@ -51,6 +51,9 @@ public class LoginPage extends JFrame{
             else 
             { 
               JOptionPane.showMessageDialog(this, "Invalid ID or Password", "Login Error", JOptionPane.ERROR_MESSAGE);
+              //reset text fields
+              userText.setText("");
+              pwdText.setText("");
             }
             
 
@@ -73,27 +76,27 @@ public class LoginPage extends JFrame{
   }
 
 
-
-
   private void openDashboard (User user)
   { 
     String role = user.getUserRole();
 
     if (role.equals("Coordinator"))
     { 
-      CoordinatorDashboard coordinatorDashboard = new CoordinatorDashboard();
-      coordinatorDashboard.setVisible(true);
+      //CoordinatorDashboard coordinatorDashboard = new CoordinatorDashboard();
+      new CoordinatorDashboard().setVisible(true);
     }
     if (role.equals("Student"))
     { 
       // put the student dashboard here, after login will direct to student dashboard
       JOptionPane.showMessageDialog(this, "Student Dashboard coming soon!");
-
+      return;
     }
     if (role.equals("Evaluator"))
     { 
       // put the evaluator dashboard here, after login will direct to student dashboard
-      JOptionPane.showMessageDialog(this, "Evaluator Dashboard coming soon!");
+
+      // Open evaluation UI
+      new EvaluationPage (user.getUserID()).setVisible(true);
     }
   }
 }

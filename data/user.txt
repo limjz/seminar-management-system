@@ -1,4 +1,5 @@
-C001|cincau|12345|Coordinator
-S001|ali|11111|Student
-S002|agao|2222|Student
-E001|mutu|3333|Evaluator
+COR-001|cincau|12345|Coordinator
+STD-001|ali|11111|Student
+STD-002|agao|2222|Student
+EVA-001|mutu|3333|Evaluator
+EVA-002|ilie|321321|Evaluator

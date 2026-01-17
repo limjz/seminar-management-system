@@ -13,7 +13,7 @@ public class ViewSessionPage extends JFrame {
 
   public ViewSessionPage() {
     super("All Session Page"); 
-    setSize (Config.WINDOW_WIDTH, Config.WINDOW_HEIGHT);
+    setSize (Config.WINDOW_WIDTH + 100, Config.WINDOW_HEIGHT/2);
     setLocationRelativeTo(null);
     setLayout(new BorderLayout());
 

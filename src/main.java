@@ -1,4 +1,6 @@
-import views.*;
+
+
+import views.LoginPage;
 
 public class main {
   public static void main(String[] args) {
@@ -7,5 +9,6 @@ public class main {
     LoginPage loginMainPage = new LoginPage();
     loginMainPage.setVisible(true);
     
+
   }
 }
