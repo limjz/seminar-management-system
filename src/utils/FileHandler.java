@@ -80,4 +80,22 @@ public class FileHandler {
       System.out.println ("ID not found."); 
     }
   }
+
+  // Overwrite file with MANY lines (needed for update logic)
+  public static void overwriteAll(String filepath, List<String> lines) {
+    try (BufferedWriter writer = new BufferedWriter(new FileWriter(filepath, false))) {
+    for (String line : lines) {
+      writer.write(line);
+      writer.newLine();
+    }
+    } catch (IOException e) {
+    System.err.println("Error overwriting file: " + e.getMessage());
+    }
+  }
+
+
+
+
+
+  
 }

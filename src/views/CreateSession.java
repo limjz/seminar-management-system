@@ -11,7 +11,6 @@ public class CreateSession extends JFrame {
 
   private final JTextField titleField; 
   private final DateSelector sessionDateBox;
-  //private final JTextField dateField;
   private final JTextField timeField;
   private final JComboBox <String> sessionVenueBox;
   private final JComboBox <String> sessionTypeBox;

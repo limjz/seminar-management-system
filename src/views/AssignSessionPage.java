@@ -32,17 +32,20 @@ public class AssignSessionPage extends JFrame{
     JLabel sessionLabel = new JLabel("Select a session to assign:"); 
     sessionBox = new JComboBox<>();
     loadSessionListfromFile();
+    sessionBox.addActionListener(e->{ 
+      loadStudentList();
+    });
 
 
     //---------------- Evaluator Selection -------------------
     JLabel evaluatorLabel = new JLabel("Select assign evaluator: ");
     evaluatorBox = new JComboBox<>(); 
-    loadUserList(evaluatorBox, "Evaluator");
+    loadEvaluatorList();
 
     //---------------- Presenter Selection -------------------
     JLabel presenterLabel = new JLabel("Select assign presenter: ");
     presenterBox = new JComboBox<>(); 
-    loadUserList(presenterBox, "Student");
+    
 
     // save button 
     JButton saveButton = new JButton("Save"); 
@@ -91,20 +94,51 @@ public class AssignSessionPage extends JFrame{
     
     for (Session session : sessionList)
     {
-      sessionBox.addItem(session.getSessionID() + " - " + session.getSessionVenue());
+      sessionBox.addItem(session.getSessionID() + " - " + session.getSessionName() + " - " + session.getSessionType());
     }
     
   }
 
-
-  private void loadUserList(JComboBox<String> box, String role)
+  // evaluator and student 
+  private void loadEvaluatorList()
   { 
     UserController us = new UserController(); 
-    List<String> users = us.getUserRole(role); 
+    List<String> users = us.getUserRole("Evaluator"); 
 
     for (String user : users)
     { 
-      box.addItem (user);
+      evaluatorBox.addItem (user);
+    }
+  }
+
+
+  private void loadStudentList ()
+  { 
+    String rawSession = (String) sessionBox.getSelectedItem();
+    String sessionID = rawSession.split(" - ")[0]; 
+    
+    SessionController sc = new SessionController(); 
+    Session selectedSession = sc.getSessionByID(sessionID);
+
+    if (selectedSession != null)
+    { 
+      String requiredType = selectedSession.getSessionType(); 
+
+      UserController uc = new UserController();
+      List<String> students = uc.getStudentBySubmissionType(requiredType);
+      
+      presenterBox.removeAllItems(); // clear previous items
+
+      if (students.isEmpty())
+      { 
+        JOptionPane.showMessageDialog(this, "No student found with submission type: " + requiredType);
+      }
+      else { 
+        for (String s : students)
+        { 
+          presenterBox.addItem(s);
+        }
+      }
     }
   }
 
