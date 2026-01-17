@@ -4,6 +4,7 @@ import model.Session;
 import utils.Config;
 import utils.FileHandler;
 
+
 public class CoordinatorController {
   
   public static boolean createSession(String sessionName, String sessionDate, String sessionTime, String sessionVenue, String sessionType) {
