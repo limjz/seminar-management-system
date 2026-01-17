@@ -8,6 +8,8 @@ import utils.FileHandler;
 
 
 public class SubmissionController {
+
+
   public List<Submission> getAllSubmission ()
   {
     List<Submission> submissionList = new ArrayList<> (); 

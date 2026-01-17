@@ -57,7 +57,7 @@ public class AssignSessionPage extends JFrame{
     JButton backButton = new JButton ("Back"); 
     backButton.addActionListener(e -> {
       dispose();
-      Config.setCoordinatorDashboardVsible();
+      Config.setSeminarDashboardVsible();
     });
 
     boxPanel.add(sessionLabel);

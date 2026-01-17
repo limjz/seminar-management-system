@@ -14,6 +14,8 @@ public class Config {
   public static final String SUBMISSIONS_FILE = "data/submissions.txt";
   public static final String ASSIGNMENTS_FILE = "data/assignments.txt";
   public static final String EVALUATIONS_FILE = "data/evaluations.txt";
+  public static final String SEMINARS_FILE = "data/seminar.txt";
+  public static final String SEMIMAR_REGISTRATION_FILE = "data/registration.txt";
 
   public static final String DELIMITER_READ = "\\|";
   public static final String DELIMITER_WRITE = "|";
@@ -24,6 +26,15 @@ public class Config {
   { 
     CoordinatorDashboard CD = new CoordinatorDashboard(); 
     CD.setVisible(true);
+
   }
+
+  public static void setSeminarDashboardVsible ()
+  { 
+    SeminarDashboard SD = new SeminarDashboard(); 
+    SD.setVisible(true);
+
+  }
+
 }
 

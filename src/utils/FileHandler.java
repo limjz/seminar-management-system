@@ -65,15 +65,7 @@ public class FileHandler {
     if (found)
     { 
       // write the whole list into file 
-      try (BufferedWriter writer = new BufferedWriter(new FileWriter(filepath, false))) { //append = false meaning rewrite the file
-      for (String line : newLines)
-      {
-        writer.write(line);
-        writer.newLine();
-      }
-      } catch (IOException e) {
-        System.err.println("Error updating file: " + e.getMessage());
-      }
+      overwriteAll(filepath, newLines);
     }
     else 
     { 
@@ -89,11 +81,39 @@ public class FileHandler {
       writer.newLine();
     }
     } catch (IOException e) {
-    System.err.println("Error overwriting file: " + e.getMessage());
+      System.err.println("Error overwriting file: " + e.getMessage());
     }
   }
 
+  public static boolean deleteData (String filepath, String targetID) // delete the whole line
+  { 
+    List <String> allLines = readAllLines(filepath); 
+    List <String> newLines = new ArrayList<>(); 
+    boolean found = false; 
 
+    for (String line : allLines)
+    { 
+      String[] parts = line.split(Config.DELIMITER_READ); 
+      
+      if (parts.length > 0) //ignore empty lines
+      {
+        if (parts[0].equals(targetID))
+        { 
+          found = true;
+          continue;
+        }
+      }
+      newLines.add(line);
+    }
+
+    if (found)
+    { 
+      overwriteAll(filepath, newLines);
+      return true;
+    }
+    
+    return false;
+  }
 
 
 
