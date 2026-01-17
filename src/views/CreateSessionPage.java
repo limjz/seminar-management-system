@@ -1,14 +1,14 @@
 package views;
 
-import controllers.CoordinatorController;
+import controllers.SessionController;
 import java.awt.*;
 import javax.swing.*;
 import models.DateSelector;
 import utils.Config;
 
-public class CreateSession extends JFrame {
+public class CreateSessionPage extends JDialog {
   
-
+  private String seminarID;
   private final JTextField titleField; 
   private final DateSelector sessionDateBox;
   private final JTextField timeField;
@@ -16,8 +16,9 @@ public class CreateSession extends JFrame {
   private final JComboBox <String> sessionTypeBox;
 
 
-  public CreateSession() {
-    super("Create Session");
+  public CreateSessionPage(JFrame parent, String seminarID) {
+    super(parent, "Create Session", true);
+    this.seminarID = seminarID;
     setSize(Config.WINDOW_WIDTH, Config.WINDOW_HEIGHT);
    
 
@@ -52,18 +53,14 @@ public class CreateSession extends JFrame {
     // add Back button
     JButton backButton = new JButton ("Back"); 
 
-
-    // click button action
+    // -------------------- Action Listener ---------------
     createSessionButton.addActionListener(e -> {
-      
-      saveSession();
-
+      saveSession(seminarID);
     });
 
-    // close current page 
     backButton.addActionListener(e ->{
       dispose();
-      Config.setCoordinatorDashboardVsible();
+      Config.setSeminarDashboardVsible();
     });
 
     // add components to panel
@@ -97,7 +94,7 @@ public class CreateSession extends JFrame {
 
   }
 
-  private void saveSession () 
+  private void saveSession (String seminarID) 
   { 
     //get info from text fields
       String name = titleField.getText();
@@ -106,20 +103,29 @@ public class CreateSession extends JFrame {
       String venue = sessionVenueBox.getSelectedItem().toString(); 
       String type = sessionTypeBox.getSelectedItem().toString();
 
-      // call controller to create session and store in database
-      boolean successCreate = CoordinatorController.createSession(name, date, time, venue, type);
-
-      if (successCreate)
+      if (name.isEmpty() && time.isEmpty())
       {
-        //pop out message
-        JOptionPane.showMessageDialog(this, "Session Created Successfully!");
+        JOptionPane.showMessageDialog(this, "Please fill all the required field!");
 
-        //set the text field to empty and first option// manual refresh
-        titleField.setText("");
-        timeField.setText("");
-        //sessionVenueBox.setSelectedItem("");
-        //sessionTypeBox.setSelectedItem("");
       }
+      else 
+      {
+        // call controller to create session and store in database
+        boolean successCreate = SessionController.createSession(seminarID, name, date, time, venue, type);
+
+        if (successCreate)
+        {
+          //pop out message
+          JOptionPane.showMessageDialog(this, "Session Created Successfully!");
+
+          //set the text field to empty and first option// manual refresh
+          titleField.setText("");
+          timeField.setText("");
+          //sessionVenueBox.setSelectedItem("");
+          //sessionTypeBox.setSelectedItem("");
+        }
+      }
+      
   }
 
 
