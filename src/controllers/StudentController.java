@@ -21,7 +21,28 @@ public class StudentController {
         return sessionList.toArray(new String[0]);
     }
 
-    // 2. Register Presentation (Write to presentation.txt)
+    // --- NEW METHOD: Get ONLY Sessions the Student Registered For ---
+    public String[] getRegisteredSessions(String studentID) {
+        List<String> lines = FileHandler.readAllLines(Config.PRESENTATION_FILE);
+        List<String> mySessions = new ArrayList<>();
+
+        for (String line : lines) {
+            String[] parts = line.split(Config.DELIMITER_READ);
+            // Format: PresID | StudentID | Title | Abstract | Supervisor | Type | SessionID | Material
+            // Indices:   0   |     1     |   2   |     3    |      4     |   5  |     6     |     7
+            if (parts.length >= 8) {
+                String registeredStudentID = parts[1]; // StudentID is at Index 1
+                String sessionID = parts[6];           // SessionID is at Index 6
+                
+                if (registeredStudentID.equals(studentID)) {
+                    mySessions.add(sessionID);
+                }
+            }
+        }
+        return mySessions.toArray(new String[0]);
+    }
+
+    // 2. Register Presentation
     public boolean registerPresentation(String studentID, String title, String type, String abstractText, String supervisor, String sessionInfo) {
         
         int count = FileHandler.readAllLines(Config.PRESENTATION_FILE).size();
@@ -86,8 +107,8 @@ public class StudentController {
                 if (i < parts.length) newLine.append(parts[i]);
                 newLine.append(Config.DELIMITER_WRITE);
             }
-            newLine.append(filePath).append(Config.DELIMITER_WRITE);
-
+            // Append the new FilePath (Index 7)
+            newLine.append(filePath);
 
             // Update the file
             FileHandler.updateData(Config.PRESENTATION_FILE, targetPresID, newLine.toString());

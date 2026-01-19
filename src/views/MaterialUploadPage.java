@@ -1,12 +1,11 @@
 package views;
 
 import controllers.StudentController;
-import models.User;
-import utils.Config;
-
-import javax.swing.*;
 import java.awt.*;
 import java.io.File;
+import javax.swing.*;
+import models.User;
+import utils.Config;
 
 public class MaterialUploadPage extends JFrame {
 
@@ -34,11 +33,19 @@ public class MaterialUploadPage extends JFrame {
         add(new JLabel("Select Session:"), gbc);
 
         JComboBox<String> cmbSessions = new JComboBox<>();
-        // Populate with sessions from controller
-        String[] sessions = controller.getAvailableSession();
-        for (String s : sessions) {
-            cmbSessions.addItem(s);
+        
+        // CALL THE NEW METHOD HERE
+        String[] mySessions = controller.getRegisteredSessions(student.getUserID());
+        
+        if (mySessions.length == 0) {
+            cmbSessions.addItem("No registrations found");
+            cmbSessions.setEnabled(false);
+        } else {
+            for (String s : mySessions) {
+                cmbSessions.addItem(s);
+            }
         }
+        
         gbc.gridx = 1; gbc.gridy = 0;
         add(cmbSessions, gbc);
 
@@ -78,8 +85,10 @@ public class MaterialUploadPage extends JFrame {
             }
         });
 
-        // Cancel Logic
-        btnCancel.addActionListener(e -> goBack());
+        btnCancel.addActionListener(e -> {
+            dispose();
+            if (previousScreen != null) previousScreen.setVisible(true);
+        });
 
         // Upload Logic
         btnUpload.addActionListener(e -> {
@@ -87,31 +96,29 @@ public class MaterialUploadPage extends JFrame {
                 JOptionPane.showMessageDialog(this, "Please select a file first.");
                 return;
             }
+            if (!cmbSessions.isEnabled()) {
+                JOptionPane.showMessageDialog(this, "You have no registered sessions.");
+                return;
+            }
 
-            String sessionInfo = (String) cmbSessions.getSelectedItem();
+            String selectedSessionID = (String) cmbSessions.getSelectedItem();
             
             // Call Controller (Updated to accept Session Info)
             boolean success = controller.uploadMaterial(
                 student.getUserID(), 
-                sessionInfo, 
+                selectedSessionID, 
                 selectedFile.getAbsolutePath()
             );
 
             if (success) {
                 JOptionPane.showMessageDialog(this, "Material uploaded successfully!");
-                goBack();
+                dispose();
+                if (previousScreen != null) previousScreen.setVisible(true);
             } else {
-                JOptionPane.showMessageDialog(this, "Upload Failed. Are you registered for this session?");
+                JOptionPane.showMessageDialog(this, "Upload Failed. Please try again.");
             }
         });
 
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-    }
-
-    private void goBack() {
-        dispose();
-        if (previousScreen != null) {
-            previousScreen.setVisible(true);
-        }
     }
 }
