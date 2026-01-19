@@ -24,30 +24,11 @@ public class StudentController {
     // 2. Register Presentation (Write to presentation.txt)
     public boolean registerPresentation(String studentID, String title, String type, String abstractText, String supervisor, String sessionInfo) {
         
-    List<String> lines = FileHandler.readAllLines(Config.PRESENTATION_FILE);
-        int nextId = 1; // Default starting ID
-
-        if (!lines.isEmpty()) {
-            try {
-                // Get the last line in the file
-                String lastLine = lines.get(lines.size() - 1);
-                String[] parts = lastLine.split(Config.DELIMITER_READ);
-                
-                // Assuming ID is the first column (index 0)
-                String lastIdString = parts[0]; // e.g., "SES-005"
-                
-                // Remove "SES-" prefix and parse the number
-                String numberPart = lastIdString.replace("SES-", "");
-                nextId = Integer.parseInt(numberPart) + 1;
-            } catch (Exception e) {
-                // If there's an error parsing (e.g. file is corrupted), reset to 1
-                System.out.println("Error parsing last ID, resetting to 1.");
-                nextId = 1;
-            }
-        }
+        int count = FileHandler.readAllLines(Config.PRESENTATION_FILE).size();
+        int nextNum = count + 1;
 
         // Format the new ID with leading zeros (e.g., SES-006)
-        String presID = String.format("SES-%03d", nextId);
+        String presID = "SESSION-0" + nextNum;
         
         // Extract just the SessionID from the dropdown string (e.g., "SESSION-01 | IPv4" -> "SESSION-01")
         String sessionID = sessionInfo.split(" \\| ")[0];
