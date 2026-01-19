@@ -1,19 +1,20 @@
 package views;
 
 import controllers.StudentController;
+import java.awt.*;
+import java.io.File;
+import javax.swing.*;
 import models.User;
 import utils.Config;
 
-import javax.swing.*;
-import java.awt.*;
-
-public class RegisterSessionPage extends JFrame {
+public class RegisterSeminarPage extends JFrame {
 
     private User student;
     private JFrame previousScreen;
     private StudentController controller;
+    private File selectedFile; 
 
-    public RegisterSessionPage(User student, JFrame previousScreen) {
+    public RegisterSeminarPage(User student, JFrame previousScreen) {
         super("Register Presentation");
         this.student = student;
         this.previousScreen = previousScreen;
@@ -59,6 +60,17 @@ public class RegisterSessionPage extends JFrame {
         
         gbc.gridx = 1; gbc.gridy = 4; add(cmbSession, gbc);
 
+        // Material Upload
+        gbc.gridx = 0; gbc.gridy = 5; add(new JLabel("Presentation File:"), gbc);
+        
+        JPanel filePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        JButton btnChooseFile = new JButton("Choose File");
+        JLabel lblFileName = new JLabel(" No file selected");
+        filePanel.add(btnChooseFile);
+        filePanel.add(lblFileName);
+        
+        gbc.gridx = 1; gbc.gridy = 5; add(filePanel, gbc);
+
         // --- Buttons ---
         JPanel btnPanel = new JPanel();
         JButton btnSubmit = new JButton("Submit");
@@ -66,10 +78,19 @@ public class RegisterSessionPage extends JFrame {
         btnPanel.add(btnSubmit);
         btnPanel.add(btnCancel);
 
-        gbc.gridx = 0; gbc.gridy = 5; gbc.gridwidth = 2;
+        gbc.gridx = 0; gbc.gridy = 6; gbc.gridwidth = 2;
         add(btnPanel, gbc);
 
         // --- Logic ---
+
+        btnChooseFile.addActionListener(e -> {
+            JFileChooser fileChooser = new JFileChooser();
+            int result = fileChooser.showOpenDialog(this);
+            if (result == JFileChooser.APPROVE_OPTION) {
+                selectedFile = fileChooser.getSelectedFile();
+                lblFileName.setText(" " + selectedFile.getName());
+            }
+        });
 
         btnCancel.addActionListener(e -> {
             dispose();
@@ -82,6 +103,8 @@ public class RegisterSessionPage extends JFrame {
                 return;
             }
 
+            String filePath = (selectedFile != null) ? selectedFile.getAbsolutePath() : null;
+
             // Call Controller
             controller.registerPresentation(
                 student.getUserID(),
@@ -89,7 +112,8 @@ public class RegisterSessionPage extends JFrame {
                 (String) cmbType.getSelectedItem(),
                 txtAbstract.getText(),
                 txtSupervisor.getText(),
-                (String) cmbSession.getSelectedItem()
+                (String) cmbSession.getSelectedItem(),
+                filePath
             );
 
             JOptionPane.showMessageDialog(this, "Registration Successful!");

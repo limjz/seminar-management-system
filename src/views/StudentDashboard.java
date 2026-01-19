@@ -2,7 +2,6 @@ package views;
 
 import controllers.StudentController;
 import java.awt.*;
-import java.io.File;
 import javax.swing.*;
 import models.User;
 import utils.Config;
@@ -34,7 +33,7 @@ public class StudentDashboard extends JFrame {
         panel.add(welcomeLabel, gbc);
 
         // Buttons
-        JButton registerSessionButton = new JButton("Register Session");
+        JButton registerSessionButton = new JButton("Register Seminar");
         registerSessionButton.setPreferredSize(btnSize);
         gbc.gridy = 1;
         panel.add(registerSessionButton, gbc);
@@ -44,19 +43,14 @@ public class StudentDashboard extends JFrame {
         gbc.gridy = 2;
         panel.add(getSessionButton, gbc);
 
-        JButton uploadMaterialButton = new JButton("Upload Material");
-        uploadMaterialButton.setPreferredSize(btnSize);
-        gbc.gridy = 3;
-        panel.add(uploadMaterialButton, gbc);
-
         JButton logoutButton = new JButton("Logout");
         logoutButton.setPreferredSize(btnSize);
-        gbc.gridy = 4;
+        gbc.gridy = 3;
         panel.add(logoutButton, gbc);
 
         // Action Listeners
         registerSessionButton.addActionListener(e -> {
-            RegisterSessionPage rsp = new RegisterSessionPage(currentUser, this);
+            RegisterSeminarPage rsp = new RegisterSeminarPage(currentUser, this);
             rsp.setVisible(true);
             this.setVisible(false);
         });
@@ -66,14 +60,6 @@ public class StudentDashboard extends JFrame {
              vsp.setVisible(true);
              this.setVisible(false); 
         });
-
-        uploadMaterialButton.addActionListener(e -> {
-             // Open the new Material Upload Page
-             MaterialUploadPage uploadPage = new MaterialUploadPage(currentUser, this);
-             uploadPage.setVisible(true);
-             this.setVisible(false);
-        }
-    );
 
         logoutButton.addActionListener(e -> dispose());
 
