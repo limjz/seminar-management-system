@@ -2,7 +2,6 @@ package controllers;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import utils.Config;
 import utils.FileHandler;
 
@@ -15,34 +14,54 @@ public class StudentController {
 
         for (String line : lines) {
             String[] parts = line.split(Config.DELIMITER_READ);
-            // Check validation: Must have at least ID and Name
             if (parts.length >= 2) {
-                // Format: "SESSION-01 | IPv4" (User friendly format)
                 sessionList.add(parts[0] + " | " + parts[1]);
             }
         }
-        
-        // Convert List to String Array to match your original method signature
         return sessionList.toArray(new String[0]);
     }
 
     // 2. Register Presentation (Write to presentation.txt)
     public boolean registerPresentation(String studentID, String title, String type, String abstractText, String supervisor, String sessionInfo) {
         
-        // Generate a unique Presentation ID (e.g., P-12345)
-        String presID = "P-" + UUID.randomUUID().toString().substring(0, 5);
+    List<String> lines = FileHandler.readAllLines(Config.PRESENTATION_FILE);
+        int nextId = 1; // Default starting ID
+
+        if (!lines.isEmpty()) {
+            try {
+                // Get the last line in the file
+                String lastLine = lines.get(lines.size() - 1);
+                String[] parts = lastLine.split(Config.DELIMITER_READ);
+                
+                // Assuming ID is the first column (index 0)
+                String lastIdString = parts[0]; // e.g., "SES-005"
+                
+                // Remove "SES-" prefix and parse the number
+                String numberPart = lastIdString.replace("SES-", "");
+                nextId = Integer.parseInt(numberPart) + 1;
+            } catch (Exception e) {
+                // If there's an error parsing (e.g. file is corrupted), reset to 1
+                System.out.println("Error parsing last ID, resetting to 1.");
+                nextId = 1;
+            }
+        }
+
+        // Format the new ID with leading zeros (e.g., SES-006)
+        String presID = String.format("SES-%03d", nextId);
         
         // Extract just the SessionID from the dropdown string (e.g., "SESSION-01 | IPv4" -> "SESSION-01")
         String sessionID = sessionInfo.split(" \\| ")[0];
 
         // Prepare the data line
-        // Format: PresID|StudentID|Title|Type|Abstract|Supervisor|SessionID|FilePath
+        // Format: PresID|StudentID|Title|Abstract|Supervisor|Type|SessionID|Material
         String newRecord = presID + Config.DELIMITER_WRITE +
                            studentID + Config.DELIMITER_WRITE +
                            title + Config.DELIMITER_WRITE +
+                           abstractText + Config.DELIMITER_WRITE +
+                           supervisor + Config.DELIMITER_WRITE +
                            type + Config.DELIMITER_WRITE +
                            sessionID + Config.DELIMITER_WRITE +
-                           "null"; // File path is null initially
+                           "null"; //Material 
 
         FileHandler.appendData(Config.PRESENTATION_FILE, newRecord);
         return true;
@@ -63,7 +82,7 @@ public class StudentController {
             String[] parts = line.split(Config.DELIMITER_READ);
             
             // Validation: Ensure line has enough columns
-            if (parts.length < 7) continue; 
+            if (parts.length < 8) continue; 
 
             String currentStudentID = parts[1];
             String currentSessionID = parts[6]; // SessionID is at index 6
@@ -82,11 +101,12 @@ public class StudentController {
             // Rebuild the line
             StringBuilder newLine = new StringBuilder();
             // Append the first 7 fields (PresID to SessionID)
-            for (int i = 0; i < 7; i++) {
+            for (int i = 0; i < 6; i++) {
                 if (i < parts.length) newLine.append(parts[i]);
                 newLine.append(Config.DELIMITER_WRITE);
             }
-            newLine.append(filePath); // Add/Update the file path
+            newLine.append(filePath).append(Config.DELIMITER_WRITE);
+
 
             // Update the file
             FileHandler.updateData(Config.PRESENTATION_FILE, targetPresID, newLine.toString());
