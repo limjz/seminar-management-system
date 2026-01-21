@@ -20,8 +20,8 @@ public class EvaluationController {
         List<String> assignedIds = new ArrayList<>();
         for (String line : sessionLines) {
             String[] parts = line.split(Config.DELIMITER_READ, -1);
-            if (parts.length >= 7 && parts[6].equals(evaluatorId)) {
-                assignedIds.add(parts[7]); // student ID
+            if (parts.length >= 8 && parts[7].equals(evaluatorId)) {
+                assignedIds.add(parts[8]); // student ID
             }
         }
 
@@ -81,6 +81,10 @@ public class EvaluationController {
         }
         return null;
     }
+
+    
+
+
 }
 
 

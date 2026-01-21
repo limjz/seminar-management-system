@@ -15,7 +15,7 @@ public class CoordinatorDashboard extends JFrame {
 
     gbc.insets = new Insets(10, 10, 10, 10); // add spacing between buttons
     gbc.anchor = GridBagConstraints.CENTER; // center the buttons 
-    Dimension btnSize = new Dimension(175, 25); // button size 
+    Dimension btnSize = new Dimension(200, 25); // button size 
 
 
     //create new sesssion button 
@@ -33,7 +33,13 @@ public class CoordinatorDashboard extends JFrame {
     //third row
     gbc.gridy = 1;
     panel.add(viewSeminarButton, gbc); 
-    
+                                                                    //wrap the text in the button 
+    JButton reportButton = new JButton("<html><center>View Seminar Schedule <br> And Evaluation Reports</center></html>"); 
+    reportButton.setPreferredSize(new Dimension(200, 35));
+    gbc.gridy = 2;
+    panel.add(reportButton, gbc);
+
+
     
     //--------------------------- Action listeners ----------------------------
     createNewSeminarButton.addActionListener(e -> {
@@ -51,6 +57,15 @@ public class CoordinatorDashboard extends JFrame {
       SD.setVisible(true);
       this.setVisible(false);
     });
+
+    reportButton.addActionListener(e->{ 
+      GenerateReportPage GRP = new GenerateReportPage(); 
+
+      GRP.setVisible(true);
+      this.setVisible(false);
+
+    });
+
 
 
     //panel.setBorder(BorderFactory.createEmptyBorder(25,50,25,50));

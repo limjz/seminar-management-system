@@ -30,13 +30,14 @@ public class EvaluationPage extends JFrame {
         this.evaluatorId = evaluatorId;
 
         setTitle("Evaluation - " + evaluatorId);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(900, 520);
-        setLocationRelativeTo(null);
-
+        
         initLayout();
         loadAssigned();
         initEvents();
+
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
     private void initLayout() {
@@ -133,6 +134,8 @@ public class EvaluationPage extends JFrame {
         txtComments.setText("");
     }
 
+
+
     private void save() {
         if (selected == null) {
             JOptionPane.showMessageDialog(this, "Please select a submission first.");
@@ -144,13 +147,17 @@ public class EvaluationPage extends JFrame {
         int results = (Integer) spResults.getValue();
         int present = (Integer) spPresent.getValue();
         String comments = txtComments.getText().trim();
+        int totalScore = problem + method + results + present;
+
         if (comments.isEmpty()) comments = "-";
 
         Evaluation ev = new Evaluation(
-                selected.getSubmissionID(),
                 evaluatorId,
+                selected.getSubmissionID(),
+                selected.getStudentID(),
                 problem, method, results, present,
-                comments
+                comments,
+                totalScore
         );
 
         EvaluationController.saveOrUpdateEvaluation(ev);
