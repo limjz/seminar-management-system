@@ -88,7 +88,7 @@ public class LoginPage extends JFrame{
     if (role.equals("Student"))
     { 
       // put the student dashboard here, after login will direct to student dashboard
-      JOptionPane.showMessageDialog(this, "Student Dashboard coming soon!");
+      new StudentDashboard(user).setVisible(true);
       return;
     }
     if (role.equals("Evaluator"))
