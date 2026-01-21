@@ -33,10 +33,10 @@ public class StudentDashboard extends JFrame {
         panel.add(welcomeLabel, gbc);
 
         // Buttons
-        JButton registerSessionButton = new JButton("Register Seminar");
-        registerSessionButton.setPreferredSize(btnSize);
+        JButton registerSeminarButton = new JButton("Register Seminar");
+        registerSeminarButton.setPreferredSize(btnSize);
         gbc.gridy = 1;
-        panel.add(registerSessionButton, gbc);
+        panel.add(registerSeminarButton, gbc);
 
         JButton getSessionButton = new JButton("Get Session");
         getSessionButton.setPreferredSize(btnSize);
@@ -49,7 +49,7 @@ public class StudentDashboard extends JFrame {
         panel.add(logoutButton, gbc);
 
         // Action Listeners
-        registerSessionButton.addActionListener(e -> {
+        registerSeminarButton.addActionListener(e -> {
             RegisterSeminarPage rsp = new RegisterSeminarPage(currentUser, this);
             rsp.setVisible(true);
             this.setVisible(false);

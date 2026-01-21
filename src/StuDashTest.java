@@ -1,5 +1,3 @@
-import models.User;
-import views.StudentDashboard;
 
 public class StuDashTest {
   public static void main(String[] args) {
@@ -8,8 +6,8 @@ public class StuDashTest {
     //User testUser = new User("S001", "John Doe", "12345", "Student");
 
     // Pass the User object to the dashboard
-    StudentDashboard dashboard = new StudentDashboard();
-    dashboard.setVisible(true);
+    // StudentDashboard dashboard = new StudentDashboard();
+    // dashboard.setVisible(true);
     
   }
 }

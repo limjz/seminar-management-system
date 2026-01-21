@@ -52,13 +52,13 @@ public class RegisterSeminarPage extends JFrame {
         gbc.gridx = 1; gbc.gridy = 3; add(cmbType, gbc);
 
         // Session Dropdown
-        gbc.gridx = 0; gbc.gridy = 4; add(new JLabel("Session:"), gbc);
+        gbc.gridx = 0; gbc.gridy = 4; add(new JLabel("Seminar:"), gbc);
         
         // Load sessions from Controller
-        String[] sessions = controller.getAvailableSession();
-        JComboBox<String> cmbSession = new JComboBox<>(sessions);
+        String[] seminars = controller.getAvailableSeminar();
+        JComboBox<String> cmbSeminar = new JComboBox<>(seminars);
         
-        gbc.gridx = 1; gbc.gridy = 4; add(cmbSession, gbc);
+        gbc.gridx = 1; gbc.gridy = 4; add(cmbSeminar, gbc);
 
         // Material Upload
         gbc.gridx = 0; gbc.gridy = 5; add(new JLabel("Presentation File:"), gbc);
@@ -112,7 +112,7 @@ public class RegisterSeminarPage extends JFrame {
                 (String) cmbType.getSelectedItem(),
                 txtAbstract.getText(),
                 txtSupervisor.getText(),
-                (String) cmbSession.getSelectedItem(),
+                (String) cmbSeminar.getSelectedItem(),
                 filePath
             );
 

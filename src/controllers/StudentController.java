@@ -3,6 +3,7 @@ package controllers;
 import java.util.ArrayList;
 import java.util.List;
 import models.Presentation;
+import models.Seminar;
 import models.Session;
 import utils.Config;
 import utils.FileHandler;
@@ -23,6 +24,21 @@ public class StudentController {
         
         return displayList.toArray(new String[0]);
     }
+
+    public String[] getAvailableSeminar(){ 
+        SeminarController sc = new SeminarController();
+        List<Seminar> allSeminars = sc.getAllSeminars(); 
+
+        List<String> displayList = new ArrayList<>(); 
+
+        for (Seminar s : allSeminars)
+        { 
+            displayList.add(s.getSeminarID() + " - " + s.getSeminarTitle()); 
+        }
+        return displayList.toArray(new String [0]);
+
+    }
+
 
     // 2. Register Presentation
     public boolean registerPresentation(String studentID, String title, String type, String abstractText, String supervisor, String sessionInfo, String filePath) {
