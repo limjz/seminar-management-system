@@ -11,7 +11,14 @@ public class CreateSessionPage extends JDialog {
   private String seminarID;
   private final JTextField titleField; 
   private final DateSelector sessionDateBox;
-  private final JTextField timeField;
+
+  //time box 
+  private JComboBox<String> hourBox; 
+  private JComboBox<String> minuteBox; 
+  private JComboBox<String> amPmBox; 
+
+
+  //private final JTextField timeField;
   private final JComboBox <String> sessionVenueBox;
   private final JComboBox <String> sessionTypeBox;
 
@@ -24,6 +31,7 @@ public class CreateSessionPage extends JDialog {
 
     JPanel formPanel = new JPanel(new GridLayout(0,1,10, 10));  
     JPanel buttonPanel = new JPanel (new FlowLayout(FlowLayout.CENTER, 20, 10));
+    JPanel timePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5,0));
 
     // labels for session details
     JLabel titleLabel = new JLabel("Session Title");
@@ -34,9 +42,11 @@ public class CreateSessionPage extends JDialog {
 
     // text fields for session details
     titleField = new JTextField(20);
-    timeField = new JTextField(20);
-   
 
+    
+    hourBox = new JComboBox<> (generateNumber (1,12));
+    minuteBox = new JComboBox<>(generateMinutes(15));
+    amPmBox = new JComboBox<>(new String[]{"AM", "PM"});
 
     // choosing option for the date, venue and type of the seminar session 
     sessionDateBox = new DateSelector();
@@ -52,6 +62,10 @@ public class CreateSessionPage extends JDialog {
     JButton createSessionButton = new JButton("Create Session");
     // add Back button
     JButton backButton = new JButton ("Back"); 
+
+
+
+
 
     // -------------------- Action Listener ---------------
     createSessionButton.addActionListener(e -> {
@@ -71,8 +85,17 @@ public class CreateSessionPage extends JDialog {
     //formPanel.add(dateField);
     formPanel.add(sessionDateBox);
 
+
+    timePanel.add(hourBox); 
+    timePanel.add(new JLabel(":")); 
+    timePanel.add(minuteBox); 
+    timePanel.add(amPmBox); 
     formPanel.add(timeLabel);
-    formPanel.add(timeField);
+    formPanel.add(timePanel);
+
+    //formPanel.add(timeField);
+
+
     formPanel.add(venueLabel);
     formPanel.add(sessionVenueBox);
 
@@ -99,7 +122,7 @@ public class CreateSessionPage extends JDialog {
     //get info from text fields
       String name = titleField.getText();
       String date = sessionDateBox.getSelectedDate_String();  
-      String time = timeField.getText();
+      String time = getSelectedTime();
       String venue = sessionVenueBox.getSelectedItem().toString(); 
       String type = sessionTypeBox.getSelectedItem().toString();
 
@@ -120,13 +143,72 @@ public class CreateSessionPage extends JDialog {
 
           //set the text field to empty and first option// manual refresh
           titleField.setText("");
-          timeField.setText("");
-          //sessionVenueBox.setSelectedItem("");
-          //sessionTypeBox.setSelectedItem("");
         }
       }
       
   }
 
 
+
+
+  private String[] generateNumber (int start, int end){ 
+    
+    int size = end - start + 1; 
+    String [] numbers = new String [size]; 
+
+    for (int i = 0; i< size; i ++)
+    { 
+      int val = start + i; 
+      if (val < 10)
+      { 
+        numbers[i] = "0" + val; 
+      }
+      else
+      { 
+        numbers [i] = "" + val;
+      }
+    }
+    return numbers; 
+  }
+
+  private String[] generateMinutes (int step){ 
+
+    // List<String> minutes = new ArrayList<>();
+    // for (int i = 0; i <60; i += step)
+    // { 
+    //   minutes.add (String.format ("%02d", i)); 
+    // }
+    // return minutes.toArray (new String[0]);
+
+    int size = 60 / step; 
+    String [] minutes = new String [size]; 
+    
+    for (int i = 0; i < size; i++)
+    { 
+      int val = i*step; 
+
+      if (val < 10)
+      { 
+        minutes [i] = "0" + val; 
+      }
+      else
+      { 
+        minutes [i] = "" + val;
+      }
+    }
+
+    return minutes;
+  } 
+
+
+
+  private String getSelectedTime()
+  { 
+    String hour = (String) hourBox.getSelectedItem(); 
+    String minute = (String) minuteBox.getSelectedItem(); 
+    String AP = (String) amPmBox.getSelectedItem(); 
+
+    return hour + ":" + minute + " " + AP;
+
+  }
 }

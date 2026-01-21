@@ -57,7 +57,7 @@ public class SeminarController {
 
   }
 
-  //student register and append to registration.txt
+  //student register and append to5 registration.txt
   public boolean registerStudent (String studentID, String seminarID)
   { 
     if (isStudentRegistered(studentID, seminarID))
