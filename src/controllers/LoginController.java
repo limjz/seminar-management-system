@@ -26,15 +26,9 @@ public class LoginController {
 
           switch (first_alp)
           {
-            case 'C':
-              user_data.setUserRole("Coordinator");
-              break; 
-            case 'S': 
-              user_data.setUserRole("Student"); 
-              break;
-            case 'E': 
-              user_data.setUserRole("Evaluator");  
-              break;
+            case 'C' -> user_data.setUserRole("Coordinator");
+            case 'S' -> user_data.setUserRole("Student");
+            case 'E' -> user_data.setUserRole("Evaluator");
           }
 
           return user_data;

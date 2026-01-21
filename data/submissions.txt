@@ -1,2 +1,2 @@
-SUB-001|STD-001|AI for Healthcare|Oral|slides/ai.pptx
-SUB-002|STD-002|Blockchain Security|Poster|poster/blockchain.png
+SUB-001|STD-001|fsfs|sfsfsfsf|sfsfsfsf|Poster|SEM-001|C:\Users\Lim Jun Zhao\OneDrive\??\eng article .docx
+SUB-002|STD-002|sff|1111111113|333333|Oral|SEM-001|C:\Users\Lim Jun Zhao\OneDrive\??\eng article .docx

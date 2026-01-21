@@ -5,13 +5,17 @@ import controllers.*;
 import java.awt.*;
 import java.util.List;
 import javax.swing.*;
+import models.Seminar;
 import models.Session;
+import models.Submission;
 import utils.Config;
 import utils.FileHandler;
 
 
 public class AssignSessionPage extends JFrame{
 
+
+  private final JComboBox <String> seminarBox; 
   private final JComboBox <String> sessionBox;
   private final JComboBox <String> evaluatorBox;
   private final JComboBox <String> presenterBox;
@@ -28,10 +32,19 @@ public class AssignSessionPage extends JFrame{
 
 
 
+    //---------------- Seminar Selection --------------------
+    JLabel seminarLabel = new JLabel("Select a seminar to assign");
+    seminarBox = new JComboBox<>(); 
+    loadSeminarList();
+    seminarBox.addActionListener(e->{ 
+      loadSessionList(); 
+    });
+
+
     // -------------- Session Selection ----------------------
     JLabel sessionLabel = new JLabel("Select a session to assign:"); 
     sessionBox = new JComboBox<>();
-    loadSessionListfromFile();
+    loadSessionList();
     sessionBox.addActionListener(e->{ 
       loadStudentList();
     });
@@ -60,6 +73,9 @@ public class AssignSessionPage extends JFrame{
       Config.setSeminarDashboardVsible();
     });
 
+    boxPanel.add(seminarLabel); 
+    boxPanel.add(seminarBox);
+
     boxPanel.add(sessionLabel);
     boxPanel.add(sessionBox);
 
@@ -87,16 +103,43 @@ public class AssignSessionPage extends JFrame{
 
 
   //function call
-  private void loadSessionListfromFile()
-  { 
-    SessionController sc = new SessionController(); 
-    List<Session> sessionList = sc.getAllSession(); 
-    
-    for (Session session : sessionList)
-    {
-      sessionBox.addItem(session.getSessionID() + " - " + session.getSessionName() + " - " + session.getSessionType());
+
+  private void loadSeminarList ()
+  {
+    SeminarController semC = new SeminarController(); 
+    List<Seminar> seminarList = semC.getAllSeminars(); 
+
+    for (Seminar seminar : seminarList)
+    { 
+      seminarBox.addItem(seminar.getSeminarID() + " - "+ seminar.getSeminarTitle());
     }
+
+  }
+
+
+
+  private void loadSessionList ()
+  { 
+    String rawSeminar = (String) seminarBox.getSelectedItem();
+    if(rawSeminar == null) return; 
     
+    String seminarID = rawSeminar.split(" - ")[0];
+
+    sessionBox.removeAllItems(); 
+
+    SessionController sc = new SessionController(); 
+    List<Session> allSessions = sc.getAllSession(); 
+
+    for(Session s : allSessions)
+    { 
+      if (s.getSeminarID().equals(seminarID))
+      {
+        sessionBox.addItem(s.getSessionID() + " - " + s.getSessionName() + " - " + s.getSessionType());
+      }
+    }
+
+
+
   }
 
   // evaluator and student 
@@ -114,31 +157,72 @@ public class AssignSessionPage extends JFrame{
 
   private void loadStudentList ()
   { 
-    String rawSession = (String) sessionBox.getSelectedItem();
-    String sessionID = rawSession.split(" - ")[0]; 
+    if(seminarBox.getSelectedItem() == null || sessionBox.getSelectedItem() == null)
+    {
+      return;
+    }
+
+    String rawSeminar = (String) seminarBox.getSelectedItem(); 
+    String seminarID = rawSeminar.split(" - ")[0].trim();
+
     
+    String rawSession = (String) sessionBox.getSelectedItem();
+    String sessionID = rawSession.split(" - ")[0].trim(); 
+
+
+    //check session type- Oral or Poster
     SessionController sc = new SessionController(); 
     Session selectedSession = sc.getSessionByID(sessionID);
 
-    if (selectedSession != null)
-    { 
-      String requiredType = selectedSession.getSessionType(); 
+    if (selectedSession == null)
+    {
+      return;  
+    }
 
-      UserController uc = new UserController();
-      List<String> students = uc.getStudentBySubmissionType(requiredType);
-      
-      presenterBox.removeAllItems(); // clear previous items
+    String requiredType = selectedSession.getSessionType().trim(); // poster or oral 
 
-      if (students.isEmpty())
-      { 
-        JOptionPane.showMessageDialog(this, "No student found with submission type: " + requiredType);
-      }
-      else { 
-        for (String s : students)
-        { 
-          presenterBox.addItem(s);
+    //get list of registerd student
+    SeminarController semC = new SeminarController();
+    List<String> registeredStudentIds = semC.getRegisteredStudents(seminarID); 
+
+    if (registeredStudentIds.isEmpty()) {
+        presenterBox.removeAllItems();
+        return;
+    }
+  
+    SubmissionController subC = new SubmissionController(); 
+
+    List<Submission> allSubmission = subC.getAllSubmissions();
+
+  
+    
+    presenterBox.removeAllItems(); // clear previous items
+    boolean found = false; 
+
+
+    //loop thru every registered student 
+    for (String studentID : registeredStudentIds)
+    {         
+
+      // get their submission 
+      for (Submission sub : allSubmission)
+      {
+        // Check if ID matches
+        if (sub.getStudentID().trim().equals(studentID)) {
+            String studentType = sub.getType().trim();
+            
+            // COMPARE THE TYPES
+            if (studentType.equalsIgnoreCase(requiredType)) {
+                presenterBox.addItem(studentID);
+                found = true;
+            }
         }
+
       }
+    }
+
+    if (!found){ 
+      presenterBox.addItem ("No eligible students found!");
     }
   }
 

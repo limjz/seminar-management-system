@@ -94,7 +94,7 @@ public class EvaluationPage extends JFrame {
         listModel.clear();
 
         for (Submission s : assignedSubmissions) {
-            listModel.addElement(s.getSubmissionId() + " - " + s.getTitle() + " (" + s.getType() + ")");
+            listModel.addElement(s.getSubmissionID() + " - " + s.getTitle() + " (" + s.getType() + ")");
         }
     }
 
@@ -107,12 +107,12 @@ public class EvaluationPage extends JFrame {
 
             selected = assignedSubmissions.get(idx);
 
-            lblSelected.setText("Selected: " + selected.getSubmissionId()
+            lblSelected.setText("Selected: " + selected.getSubmissionID()
                     + " | " + selected.getTitle()
-                    + " | File: " + selected.getFilePath());
+                    + " | File: " + selected.getMaterial());
 
             // load existing evaluation if any
-            Evaluation existing = EvaluationController.getExistingEvaluation(evaluatorId, selected.getSubmissionId());
+            Evaluation existing = EvaluationController.getExistingEvaluation(evaluatorId, selected.getSubmissionID());
             if (existing != null) {
                 spProblem.setValue(existing.getProblemClarity());
                 spMethod.setValue(existing.getMethodology());
@@ -147,7 +147,7 @@ public class EvaluationPage extends JFrame {
         if (comments.isEmpty()) comments = "-";
 
         Evaluation ev = new Evaluation(
-                selected.getSubmissionId(),
+                selected.getSubmissionID(),
                 evaluatorId,
                 problem, method, results, present,
                 comments
