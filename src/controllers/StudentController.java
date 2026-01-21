@@ -2,15 +2,15 @@ package controllers;
 
 import java.util.ArrayList;
 import java.util.List;
-import models.Presentation;
 import models.Seminar;
 import models.Session;
+import models.Submission;
 import utils.Config;
 import utils.FileHandler;
 
 public class StudentController {
 
-    // 1. Get Available Sessions 
+    // Get Available Sessions 
     // Uses your existing SessionController to get objects cleanly
     public String[] getAvailableSession() {
         SessionController sc = new SessionController();
@@ -19,7 +19,7 @@ public class StudentController {
         List<String> displayList = new ArrayList<>();
         
         for (Session s : allSessions) {
-            displayList.add(s.getSessionID() + " | " + s.getSessionName());
+            displayList.add(s.getSeminarID() + " | " + s.getSessionName());
         }
         
         return displayList.toArray(new String[0]);
@@ -40,31 +40,31 @@ public class StudentController {
     }
 
 
-    // 2. Register Presentation
+    // Register Presentation
     public boolean registerPresentation(String studentID, String title, String type, String abstractText, String supervisor, String sessionInfo, String filePath) {
         
-        int count = FileHandler.readAllLines(Config.PRESENTATION_FILE).size();
+        int count = FileHandler.readAllLines(Config.SUBMISSIONS_FILE).size();
         int nextNum = count + 1;
 
-        String presID = "PresentationID-0" + nextNum;
+        String subID = "SUB-00" + nextNum;
 
-        String sessionID = sessionInfo.split(" \\| ")[0];
+        String seminarID = sessionInfo.split(" \\| ")[0];
 
         String finalPath = (filePath == null) ? "null" : filePath;
 
         // Create Object
-        Presentation newPres = new Presentation(
-            presID,
+        Submission newPres = new Submission(
+            subID,
             studentID,
             title,
             abstractText,
             supervisor,
             type,
-            sessionID,
+            seminarID,
             finalPath
         );
 
-        FileHandler.appendData(Config.PRESENTATION_FILE, newPres.toFileLine());
+        FileHandler.appendData(Config.SUBMISSIONS_FILE, newPres.toFileLine());
         return true;
         }   
     }

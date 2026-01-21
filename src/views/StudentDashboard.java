@@ -9,7 +9,7 @@ import utils.Config;
 public class StudentDashboard extends JFrame {
 
     private User currentUser;
-    private StudentController controller;
+    private final StudentController controller;
 
     // --- FIX IS HERE: Constructor must accept 'User', not Strings ---
     public StudentDashboard(User user) {

@@ -8,14 +8,14 @@ import utils.Config;
 
 public class CreateSessionPage extends JDialog {
   
-  private String seminarID;
+  private final String seminarID;
   private final JTextField titleField; 
   private final DateSelector sessionDateBox;
 
   //time box 
-  private JComboBox<String> hourBox; 
-  private JComboBox<String> minuteBox; 
-  private JComboBox<String> amPmBox; 
+  private final JComboBox<String> hourBox; 
+  private final JComboBox<String> minuteBox; 
+  private final JComboBox<String> amPmBox; 
 
 
   //private final JTextField timeField;
@@ -82,9 +82,7 @@ public class CreateSessionPage extends JDialog {
     formPanel.add(titleField);
 
     formPanel.add(dateLabel);
-    //formPanel.add(dateField);
     formPanel.add(sessionDateBox);
-
 
     timePanel.add(hourBox); 
     timePanel.add(new JLabel(":")); 
@@ -92,8 +90,6 @@ public class CreateSessionPage extends JDialog {
     timePanel.add(amPmBox); 
     formPanel.add(timeLabel);
     formPanel.add(timePanel);
-
-    //formPanel.add(timeField);
 
 
     formPanel.add(venueLabel);
@@ -173,13 +169,6 @@ public class CreateSessionPage extends JDialog {
 
   private String[] generateMinutes (int step){ 
 
-    // List<String> minutes = new ArrayList<>();
-    // for (int i = 0; i <60; i += step)
-    // { 
-    //   minutes.add (String.format ("%02d", i)); 
-    // }
-    // return minutes.toArray (new String[0]);
-
     int size = 60 / step; 
     String [] minutes = new String [size]; 
     
@@ -199,7 +188,6 @@ public class CreateSessionPage extends JDialog {
 
     return minutes;
   } 
-
 
 
   private String getSelectedTime()

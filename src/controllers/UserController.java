@@ -48,7 +48,7 @@ public class UserController {
     List<User> allUser = getAllUser(); 
     List<String> filteredStudentList = new ArrayList<>();
 
-    List<Submission> allSub = new SubmissionController().getAllSubmission();
+    List<Submission> allSub = new SubmissionController().getAllSubmissions();
 
     for (User u : allUser)
     { 
@@ -57,7 +57,7 @@ public class UserController {
 
       for (Submission s : allSub)
       {
-        if (u.getUserID().equals(s.getStudentId()) && s.getType().equals(targetType))
+        if (u.getUserID().equals(s.getStudentID()) && s.getType().equals(targetType))
         { 
           filteredStudentList.add(u.getUserID() + " - " + u.getUserName());
           break;

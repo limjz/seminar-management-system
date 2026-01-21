@@ -3,42 +3,69 @@ package models;
 import utils.Config;
 
 public class Submission {
+    private final String subID;
+    private final String studentID;
+    private final String title;
+    private final String abstractText;
+    private final String supervisor;
+    private final String type;
+    private final String seminarID;
+    private String material;
 
-    private String submissionId;
-    private String studentId;
-    private String title;
-    private String type;     // Oral / Poster
-    private String filePath; // optional
-
-    public Submission(String submissionId, String studentId, String title, String type, String filePath) {
-        this.submissionId = submissionId;
-        this.studentId = studentId;
+    // Constructor
+    public Submission(String subID, String studentID, String title, String abstractText, 
+                        String supervisor, String type, String seminarID, String material) {
+        this.subID = subID;
+        this.studentID = studentID;
         this.title = title;
+        this.abstractText = abstractText;
+        this.supervisor = supervisor;
         this.type = type;
-        this.filePath = filePath;
+        this.seminarID = seminarID;
+        this.material = material;
     }
 
-    // object -> txt line
+    // Convert Object -> File String
     public String toFileLine() {
-        return submissionId + Config.DELIMITER_WRITE +
-               studentId + Config.DELIMITER_WRITE +
+        return subID + Config.DELIMITER_WRITE +
+               studentID + Config.DELIMITER_WRITE +
                title + Config.DELIMITER_WRITE +
+               abstractText + Config.DELIMITER_WRITE +
+               supervisor + Config.DELIMITER_WRITE +
                type + Config.DELIMITER_WRITE +
-               filePath;
+               seminarID + Config.DELIMITER_WRITE +
+               material;
     }
 
-    // txt line -> object
+    // Convert File String -> Object
     public static Submission fromFileLine(String line) {
-        String[] parts = line.split(Config.DELIMITER_READ, -1);
-        if (parts.length < 5) return null;
-        return new Submission(parts[0], parts[1], parts[2], parts[3], parts[4]);
+        String[] parts = line.split(Config.DELIMITER_READ);
+        
+        // Ensure we have at least 8 parts (even if material is "null")
+        if (parts.length < 8) return null;
+
+        return new Submission(
+            parts[0], // subID
+            parts[1], // studentID
+            parts[2], // title
+            parts[3], // abstract
+            parts[4], // supervisor
+            parts[5], // type
+            parts[6], // seminarID
+            parts[7]  // material
+        );
     }
 
-    // getters
-    public String getSubmissionId() { return submissionId; }
-    public String getStudentId() { return studentId; }
+    // Getters
+    public String getSubmissionID() { return subID; }
+    public String getStudentID() { return studentID; }
     public String getTitle() { return title; }
+    public String getAbstractText() { return abstractText; }
+    public String getSupervisor() { return supervisor; }
     public String getType() { return type; }
-    public String getFilePath() { return filePath; }
-}
+    public String getSeminarID() { return seminarID; }
+    public String getMaterial() { return material; }
 
+    // Setters (Only the ones you might update)
+    public void setMaterial(String material) { this.material = material; }
+}

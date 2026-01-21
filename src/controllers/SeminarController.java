@@ -1,5 +1,6 @@
 package controllers;
 
+import java.io.File;
 import java.util.*; 
 import models.Seminar;
 import utils.Config;
@@ -38,48 +39,66 @@ public class SeminarController {
   // check registration.txt if the student is registered to any seminar
   private boolean isStudentRegistered (String studentID, String seminarID)
   { 
-    List<String> allRegistrations = FileHandler.readAllLines(Config.SEMIMAR_REGISTRATION_FILE); 
+    File f = new File(Config.SEMINAR_REGISTRATION_FILE);
+    if (!f.exists()) return false;
+
+    List<String> lines = FileHandler.readAllLines(Config.SEMINAR_REGISTRATION_FILE);
     
-    for (String line : allRegistrations)
-    { 
-      String [] parts = line.split(Config.DELIMITER_READ); 
-      
-      String registeredSeminarID = parts[0]; 
-      String registerdStudentID = parts [1];
+    for (String line : lines) {
+        // Trim to remove accidental spaces at ends
+        String cleanLine = line.trim();
+        
+        // Skip empty lines 
+        if (cleanLine.isEmpty()) continue;
 
-      if (registerdStudentID.equals(studentID) && registeredSeminarID.equals(seminarID))
-      { 
-        return true;
-      } 
+        String[] parts = cleanLine.split("\\|");
+
+        
+        // Check if parts.length >= 2 BEFORE trying to read parts[1]
+        if (parts.length >= 2) {
+            String currentSeminarId = parts[0].trim();
+            String currentStudentId = parts[1].trim();
+            
+            if (currentSeminarId.equals(seminarID) && currentStudentId.equals(studentID)) {
+                return true;
+            }
+        }
     }
-
-    return false; // loop thru the registration.txt file and didnt found the name
+    return false;
 
   }
 
-  //student register and append to5 registration.txt
+  //student register and append to registration.txt
   public boolean registerStudent (String studentID, String seminarID)
   { 
+
+    // 1. Check if IDs are valid
+    if (studentID == null || seminarID == null || studentID.isEmpty() || seminarID.isEmpty()) {
+        return false;
+    }
+
     if (isStudentRegistered(studentID, seminarID))
     { 
       return false; //already registered
     }
 
-    String line = seminarID + " - " + studentID;
-    FileHandler.appendData(Config.SEMIMAR_REGISTRATION_FILE, line);
+    String line = seminarID + "|" + studentID;
+    FileHandler.appendData(Config.SEMINAR_REGISTRATION_FILE, line);
+
+
     return true;
   }
 
   public List<String> getRegisteredStudents (String seminarID){ 
     List<String> studentIDs = new ArrayList<>();
-    List<String> allRegistered = FileHandler.readAllLines(Config.SEMIMAR_REGISTRATION_FILE);
+    List<String> allRegistered = FileHandler.readAllLines(Config.SEMINAR_REGISTRATION_FILE);
     
     for (String line :allRegistered)
     { 
       String[] parts = line.split(Config.DELIMITER_READ); 
       if (parts[0].equals(seminarID))
       { 
-        studentIDs.add(parts[0]);
+        studentIDs.add(parts[1]);
       }
     }
 
