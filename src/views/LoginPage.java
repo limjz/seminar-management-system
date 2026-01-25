@@ -6,97 +6,96 @@ import javax.swing.*;
 import models.User;
 import utils.Config;
 
-public class LoginPage extends JFrame{
-  
-  // constructor 
-  public LoginPage () 
-  { 
-    // create window 
-        super ("Login");
+public class LoginPage extends JFrame {
 
-        JPanel pagePanel = new JPanel();
-        setSize(Config.WINDOW_WIDTH, Config.WINDOW_HEIGHT/2);
-        setLocationRelativeTo(null);
+  // constructor
+  public LoginPage() {
 
-        pagePanel.setLayout( new GridLayout(3,2, 10, 10)); // grid layout
-        
-        //labels 
-        JLabel userLabel = new JLabel("Username:");
-        JLabel pwdLabel = new JLabel("Password:");
+    super("Login");
 
-        //text 
-        JTextField userText = new JTextField(); 
-        JPasswordField pwdText = new JPasswordField();
+    JPanel pagePanel = new JPanel();
+    setSize(Config.WINDOW_WIDTH, Config.WINDOW_HEIGHT / 2);
+    setLocationRelativeTo(null);
 
-        //button
-        JButton loginButton = new JButton ("Login"); //Login button 
-        // to centre the button 
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER)); 
-        buttonPanel.add(loginButton);
+    pagePanel.setLayout(new GridLayout(3, 2, 10, 10)); // grid layout
 
+    // labels
+    JLabel userLabel = new JLabel("Username:");
+    JLabel pwdLabel = new JLabel("Password:");
 
-        loginButton.addActionListener(e -> {
-            String username = userText.getText().toUpperCase(); 
-            String password = new String (pwdText.getPassword()); // getPassword returns char array
-                                                                 // Convert char to string => new String(char[]
-            User user = LoginController.authentication(username, password);
-            if (user != null) // user found
-            { 
-              //JOptionPane.showMessageDialog(this, "Login Successfully!\n" );
-              openDashboard(user);
-              
-              this.dispose();
-            }
-            
-            else 
-            { 
-              JOptionPane.showMessageDialog(this, "Invalid ID or Password", "Login Error", JOptionPane.ERROR_MESSAGE);
-              //reset text fields
-              userText.setText("");
-              pwdText.setText("");
-            }
-            
+    // text fields
+    JTextField userText = new JTextField();
+    JPasswordField pwdText = new JPasswordField();
 
-        });
+    // button
+    JButton loginButton = new JButton("Login"); // Login button
 
-        //add components to window (pagePanel)
-        pagePanel.add (userLabel);
-        pagePanel.add (userText);
-        pagePanel.add (pwdLabel);
-        pagePanel.add (pwdText);
-        pagePanel.add (buttonPanel);
+    // center the button
+    JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+    buttonPanel.add(loginButton);
 
-        pagePanel.setBorder( BorderFactory.createEmptyBorder(20,20,20,20));
+    // login click action
+    loginButton.addActionListener(e -> {
+      String username = userText.getText().toUpperCase();
+      String password = new String(pwdText.getPassword());
 
-        add(pagePanel, BorderLayout.CENTER);
-        add(buttonPanel, BorderLayout.SOUTH);
+      User user = LoginController.authentication(username, password);
 
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+      if (user != null) {
+        openDashboard(user);
+        this.dispose(); // close login after successful login
+      } else {
+        JOptionPane.showMessageDialog(this, "Invalid ID or Password", "Login Error", JOptionPane.ERROR_MESSAGE);
+        userText.setText("");
+        pwdText.setText("");
+      }
+    });
 
+    // add components to panel
+    pagePanel.add(userLabel);
+    pagePanel.add(userText);
+    pagePanel.add(pwdLabel);
+    pagePanel.add(pwdText);
+
+    // spacing
+    pagePanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+
+    add(pagePanel, BorderLayout.CENTER);
+    add(buttonPanel, BorderLayout.SOUTH);
+
+    setDefaultCloseOperation(EXIT_ON_CLOSE);
   }
 
-
-  private void openDashboard (User user)
-  { 
+  /**
+   * Open dashboard based on role after login.
+   */
+  private void openDashboard(User user) {
     String role = user.getUserRole();
 
-    if (role.equals("Coordinator"))
-    { 
-      //CoordinatorDashboard coordinatorDashboard = new CoordinatorDashboard();
+    if (role.equals("Coordinator")) {
       new CoordinatorDashboard().setVisible(true);
+      return;
     }
-    if (role.equals("Student"))
-    { 
-      // put the student dashboard here, after login will direct to student dashboard
+
+    if (role.equals("Student")) {
       JOptionPane.showMessageDialog(this, "Student Dashboard coming soon!");
       return;
     }
-    if (role.equals("Evaluator"))
-    { 
-      // put the evaluator dashboard here, after login will direct to student dashboard
 
-      // Open evaluation UI
-      new EvaluationPage (user.getUserID()).setVisible(true);
+    if (role.equals("Evaluator")) {
+      // pass evaluator ID so EvaluationPage can filter assigned submissions
+      new EvaluationPage(user.getUserID()).setVisible(true);
+      return;
     }
+
+    JOptionPane.showMessageDialog(this, "Unknown role: " + role, "Role Error", JOptionPane.ERROR_MESSAGE);
+  }
+
+  /**
+   * Main method so you can run LoginPage directly:
+   * java -cp bin views.LoginPage
+   */
+  public static void main(String[] args) {
+    SwingUtilities.invokeLater(() -> new LoginPage().setVisible(true));
   }
 }

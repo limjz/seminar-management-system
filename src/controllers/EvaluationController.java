@@ -20,8 +20,15 @@ public class EvaluationController {
         List<String> assignedIds = new ArrayList<>();
         for (String line : sessionLines) {
             String[] parts = line.split(Config.DELIMITER_READ, -1);
-            if (parts.length >= 7 && parts[6].equals(evaluatorId)) {
-                assignedIds.add(parts[7]); // student ID
+            
+            // needs index 7, so length must be >= 8
+            if (parts.length >= 8) {
+                String evaId = parts[6].trim();
+                String studentId = parts[7].trim();
+
+                if (evaId.equalsIgnoreCase(evaluatorId.trim())) {
+                    assignedIds.add(studentId); // student ID
+                }
             }
         }
 

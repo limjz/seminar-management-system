@@ -45,13 +45,13 @@ public class Evaluation {
         if (parts.length < 7) return null;
 
         return new Evaluation(
-                parts[0],
-                parts[1],
+                parts[0].trim(),
+                parts[1].trim(),
                 parseIntSafe(parts[2]),
                 parseIntSafe(parts[3]),
                 parseIntSafe(parts[4]),
                 parseIntSafe(parts[5]),
-                parts[6]
+                parts[6].trim()
         );
     }
 
