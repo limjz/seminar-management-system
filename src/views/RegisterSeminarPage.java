@@ -3,7 +3,6 @@ package views;
 import controllers.SeminarController;
 import controllers.StudentController;
 import java.awt.*;
-import java.io.File;
 import javax.swing.*;
 import models.User;
 import utils.Config;
@@ -13,13 +12,13 @@ public class RegisterSeminarPage extends JFrame {
     private final User student;
     private final JFrame previousScreen;
     private final StudentController controller;
-    private File selectedFile; 
 
     private final JTextField titleField;
     private final JTextArea abstractField;
     private final JTextField supervisorField;
     private final JComboBox<String> typeBox;
     private final JComboBox<String> seminarBox;
+    private final JTextField txtCloudLink;
 
 
     public RegisterSeminarPage(User student, JFrame previousScreen) {
@@ -67,16 +66,11 @@ public class RegisterSeminarPage extends JFrame {
         
         gbc.gridx = 1; gbc.gridy = 4; add(seminarBox, gbc);
 
-        // Material Upload
-        gbc.gridx = 0; gbc.gridy = 5; add(new JLabel("Presentation File:"), gbc);
-        
-        JPanel filePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
-        JButton btnChooseFile = new JButton("Choose File");
-        JLabel lblFileName = new JLabel(" No file selected");
-        filePanel.add(btnChooseFile);
-        filePanel.add(lblFileName);
-        
-        gbc.gridx = 1; gbc.gridy = 5; add(filePanel, gbc);
+        // Cloud Link
+        gbc.gridx = 0; gbc.gridy = 5; add(new JLabel("Cloud Share Link:"), gbc);
+        txtCloudLink = new JTextField();
+        txtCloudLink.setToolTipText("Paste Google Drive or OneDrive link here");
+        gbc.gridx = 1; gbc.gridy = 5; add(txtCloudLink, gbc);
 
         // ----------- Buttons ---------------
         JPanel btnPanel = new JPanel();
@@ -89,15 +83,6 @@ public class RegisterSeminarPage extends JFrame {
         add(btnPanel, gbc);
 
         // ------------ ActionListener -----------
-
-        btnChooseFile.addActionListener(e -> {
-            JFileChooser fileChooser = new JFileChooser();
-            int result = fileChooser.showOpenDialog(this);
-            if (result == JFileChooser.APPROVE_OPTION) {
-                selectedFile = fileChooser.getSelectedFile();
-                lblFileName.setText(" " + selectedFile.getName());
-            }
-        });
 
         btnCancel.addActionListener(e -> {
             dispose();
@@ -119,7 +104,15 @@ public class RegisterSeminarPage extends JFrame {
             return;
         }
 
-        String filePath = (selectedFile != null) ? selectedFile.getAbsolutePath() : "No File";
+            String Link = txtCloudLink.getText().toLowerCase();
+            boolean isValidLink = Link.contains("drive.google.com") || 
+                                  Link.contains("onedrive.live.com") ||
+                                  Link.contains("sharepoint.com");
+        
+        if (!isValidLink) {
+            JOptionPane.showMessageDialog(this, "Please provide a valid link.");
+            return;
+        }
 
         // Validate Seminar Selection
         String selectedSeminarRaw = (String) seminarBox.getSelectedItem();
@@ -141,7 +134,7 @@ public class RegisterSeminarPage extends JFrame {
             abstractField.getText(),
             supervisorField.getText(),
             seminarID,
-            filePath
+            txtCloudLink.getText()
         );
 
         // Update registration.txt
