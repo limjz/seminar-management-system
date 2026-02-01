@@ -8,7 +8,8 @@ import java.util.List;
 import javax.swing.*;
 import models.Evaluation;
 import models.Submission;
-import java.awt.Desktop;
+import utils.Config;
+
 
 public class EvaluationPage extends JFrame {
 
@@ -30,10 +31,10 @@ public class EvaluationPage extends JFrame {
     private final JLabel lbl4 = new JLabel("Presentation (0-5):");
 
     // Rubric inputs (0 - 5)
-    private final JSpinner sp1 = new JSpinner(new SpinnerNumberModel(0, 0, 5, 1));
-    private final JSpinner sp2 = new JSpinner(new SpinnerNumberModel(0, 0, 5, 1));
-    private final JSpinner sp3 = new JSpinner(new SpinnerNumberModel(0, 0, 5, 1));
-    private final JSpinner sp4 = new JSpinner(new SpinnerNumberModel(0, 0, 5, 1));
+    private final JSpinner sp1 = new JSpinner(new SpinnerNumberModel(0, 0, 25, 1));
+    private final JSpinner sp2 = new JSpinner(new SpinnerNumberModel(0, 0, 25, 1));
+    private final JSpinner sp3 = new JSpinner(new SpinnerNumberModel(0, 0, 25, 1));
+    private final JSpinner sp4 = new JSpinner(new SpinnerNumberModel(0, 0, 25, 1));
 
     // Comments textbox
     private final JTextArea txtComments = new JTextArea(6, 30);
@@ -42,18 +43,19 @@ public class EvaluationPage extends JFrame {
     private final JButton btnOpenFile = new JButton("Open File");
     private final JButton btnClear = new JButton("Clear");
     private final JButton btnSave = new JButton("Save");
+    private final JButton btnLogout = new JButton("Logout"); 
 
     // Data loaded from controller
     private List<Submission> assignedSubmissions;
     private Submission selected; // currently selected submission from list
 
+    
     public EvaluationPage(String evaluatorId) {
         this.evaluatorId = evaluatorId;
 
         setTitle("Evaluation - " + evaluatorId);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(920, 560);
-        setLocationRelativeTo(null);
+
 
         initLayout();
         loadAssigned();
@@ -106,11 +108,13 @@ public class EvaluationPage extends JFrame {
         // BOTTOM panel: buttons
         JPanel bottom = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         btnOpenFile.setEnabled(false); // only enable when a submission with file path is selected
+        bottom.add(btnLogout);
         bottom.add(btnOpenFile);
         bottom.add(btnClear);
         bottom.add(btnSave);
 
         // Button actions
+        btnLogout.addActionListener(e-> Config.backToLogin(this));
         btnClear.addActionListener(e -> clearForm());
         btnSave.addActionListener(e -> save());
         btnOpenFile.addActionListener(e -> openSelectedFile());
@@ -119,6 +123,7 @@ public class EvaluationPage extends JFrame {
         add(center, BorderLayout.CENTER);
         add(bottom, BorderLayout.SOUTH);
     }
+
 
     /**
      * Load assigned submissions for this evaluator.
@@ -149,15 +154,15 @@ public class EvaluationPage extends JFrame {
             selected = assignedSubmissions.get(idx);
 
             // Show selected submission info
-            lblSelected.setText("Selected: " + selected.getSubmissionId()
+            lblSelected.setText("Selected: " + selected.getSubmissionID()
                     + " | " + selected.getTitle()
                     + " | Type: " + selected.getType());
 
-            // ✅ Apply different rubric labels depending on submission type (Oral/Poster)
+            // Apply different rubric labels depending on submission type (Oral/Poster)
             applyRubricLabels(selected.getType());
 
             // Show file path as hyperlink-style text and enable open button
-            String filePath = selected.getFilePath();
+            String filePath = selected.getMaterial();
             if (filePath == null || filePath.trim().isEmpty() || filePath.equals("-")) {
                 lblFileLink.setText("<html>File: -</html>");
                 btnOpenFile.setEnabled(false);
@@ -167,13 +172,13 @@ public class EvaluationPage extends JFrame {
             }
 
             // Load existing evaluation if any
-            Evaluation existing = EvaluationController.getExistingEvaluation(evaluatorId, selected.getSubmissionId());
+            Evaluation existing = EvaluationController.getExistingEvaluation(evaluatorId, selected.getSubmissionID());
             if (existing != null) {
                 // These are the numeric scores saved in txt
-                sp1.setValue(existing.getProblemClarity());
-                sp2.setValue(existing.getMethodology());
-                sp3.setValue(existing.getResults());
-                sp4.setValue(existing.getPresentation());
+                sp1.setValue(existing.getScore1());
+                sp2.setValue(existing.getScore2());
+                sp3.setValue(existing.getScore3());
+                sp4.setValue(existing.getScore4());
                 txtComments.setText(existing.getComments());
             } else {
                 clearForm();
@@ -182,7 +187,7 @@ public class EvaluationPage extends JFrame {
     }
 
     /**
-     * ✅ Different rubrics for Oral vs Poster.
+     * Different rubrics for Oral vs Poster.
      * We reuse the same 4 spinners but change the labels.
      * (This avoids changing your controller/model storage format too much.)
      */
@@ -232,19 +237,17 @@ public class EvaluationPage extends JFrame {
         int score4 = (Integer) sp4.getValue();
 
         String comments = txtComments.getText().trim();
-        int totalScore = problem + method + results + present;
+        int totalScore = score1 + score2 + score3 + score4;
 
         if (comments.isEmpty()) comments = "-";
 
-        // IMPORTANT: Evaluation constructor order is (evaluatorId, submissionId, ...)
+        // IMPORTANT: Evaluation constructor order is (evaluatorId, seminarId, studentId, submissionId, ...)
         Evaluation ev = new Evaluation(
                 evaluatorId,
-                selected.getSubmissionId(),
-                score1, score2, score3, score4,
-                comments
-                selected.getSubmissionID(),
+                selected.getSeminarID(),
                 selected.getStudentID(),
-                problem, method, results, present,
+                selected.getSubmissionID(),
+                score1, score2, score3, score4,
                 comments,
                 totalScore
         );
@@ -266,7 +269,7 @@ public class EvaluationPage extends JFrame {
             return;
         }
 
-        String path = selected.getFilePath();
+        String path = selected.getMaterial();
         if (path == null || path.trim().isEmpty() || path.equals("-")) {
             JOptionPane.showMessageDialog(this, "No file path available for this submission.");
             return;

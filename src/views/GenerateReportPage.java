@@ -3,6 +3,7 @@ package views;
 import controllers.ReportController;
 import controllers.SeminarController;
 import java.awt.*;
+import java.io.*;
 import java.util.List;
 import javax.swing.*; 
 import models.Seminar;
@@ -24,6 +25,8 @@ public class GenerateReportPage extends JFrame {
     setSize (Config.WINDOW_WIDTH, Config.WINDOW_HEIGHT); 
     setLayout( new BorderLayout() );
 
+    // init controller 
+    reportController = new ReportController(); 
 
     // ------- seminar selector drop down ---------
     JPanel topPanel = new JPanel (new FlowLayout( FlowLayout.LEFT));
@@ -32,7 +35,6 @@ public class GenerateReportPage extends JFrame {
     seminarBox = new JComboBox<>(); 
     loadSeminar();
     
-
 
     // --------- paper sheets area for display of the schedule & evaluation result -----
     displayArea = new JTextArea(); 
@@ -44,12 +46,18 @@ public class GenerateReportPage extends JFrame {
     // -------------- button --------------
     JPanel buttonPanel = new JPanel(); 
 
+    JButton backButton = new JButton("Back");
     JButton scheduleButton = new JButton("Generate Schedule");
     JButton reportButton = new JButton ("Generate Report"); 
     JButton exportButton = new JButton ("Export"); 
-    JButton backButton = new JButton("Back");
+
 
     //-------------- Action Listener ------------ 
+    backButton.addActionListener(e-> { 
+      dispose();
+      Config.setCoordinatorDashboardVsible();
+    });
+    
     scheduleButton.addActionListener(e-> { 
       
       seminarID = getSeminarID(); 
@@ -57,7 +65,6 @@ public class GenerateReportPage extends JFrame {
       
       if (seminarID != null)
       { 
-        reportController = new ReportController(); 
         String text = reportController.getScheduleTextArea(seminarID, seminarTitle); 
         displayArea.setText(text);
 
@@ -80,15 +87,18 @@ public class GenerateReportPage extends JFrame {
       }
     });
 
+    exportButton.addActionListener(e-> {
+      String content = displayArea.getText(); 
 
-    backButton.addActionListener(e-> { 
-      dispose();
-      Config.setCoordinatorDashboardVsible();
+      if (content.isEmpty())
+      { 
+        JOptionPane.showMessageDialog(this, "This report is empty, cannot export an empty report!");
+        return;
+      }
+      exportReport (content);
+
     });
-
-
-
-
+   
     topPanel.add (seminarLabel); 
     topPanel.add( seminarBox); 
     
@@ -145,4 +155,40 @@ public class GenerateReportPage extends JFrame {
     return rawSeminar.split(" - ")[1];
   }
 
+  private void exportReport (String content) { 
+
+    JFileChooser fileChooser = new JFileChooser(); 
+    fileChooser.setDialogTitle("Save Report As");
+
+    // put the seminarID in the name of file, else put it as :current_export
+    String defaultFileName = "Report_" + (seminarID != null ? seminarID : "current_export") + ".txt";
+    fileChooser.setSelectedFile(new File(defaultFileName));
+
+    int userSelection = fileChooser.showSaveDialog(this); 
+
+    if(userSelection == JFileChooser.APPROVE_OPTION) { 
+      File fileToSave = fileChooser.getSelectedFile(); 
+
+      // check if it save as .txt file
+      if (!fileToSave.getName().toLowerCase().endsWith(".txt"))
+      { 
+        fileToSave = new File(fileToSave.getAbsolutePath() + ".txt"); //add the file type at the back of the path to force it become .txt file
+      }
+
+      //write to file (export core function )
+      try (FileWriter writer = new FileWriter(fileToSave))
+      { 
+        writer.write(content);
+        JOptionPane.showMessageDialog(this, "File save successfully!\n" +  fileToSave.getAbsolutePath());
+      } 
+      catch (IOException ex)
+      { 
+        JOptionPane.showMessageDialog(this, "Error saving file:" + ex.getMessage());
+      }
+
+    }
+
+
+
+  }
 }

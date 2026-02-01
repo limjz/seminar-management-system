@@ -18,15 +18,15 @@ public class CreateSeminarPage extends JFrame {
     JPanel formPanel = new JPanel(new GridLayout(0,1,10, 10));
     JPanel buttonPanel = new JPanel (new FlowLayout(FlowLayout.CENTER, 20, 10));
   
-    //Labels for the seminar details
+    // ------ Labels for the seminar details ---------
     JLabel titleLabel = new JLabel("Seminar Title"); 
     JLabel dateLabel = new JLabel("Date (YYYY-MM-DD)");
 
-    //text field
+    // ---------- text field -------------
     titleField = new JTextField(20); 
     seminarDateBox = new DateSelector (); 
 
-    //button 
+    //---------- button ------------
     JButton createSeminarButton = new JButton("Create Seminar"); 
     JButton backButton = new JButton ("Back"); 
 
@@ -52,10 +52,8 @@ public class CreateSeminarPage extends JFrame {
       
     });
 
-
-     // close current page 
     backButton.addActionListener(e ->{
-      dispose();
+      dispose();     // close current page 
       Config.setCoordinatorDashboardVsible();
     });
 

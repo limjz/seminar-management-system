@@ -10,31 +10,27 @@ public class LoginPage extends JFrame {
 
   // constructor
   public LoginPage() {
-
     super("Login");
-
     JPanel pagePanel = new JPanel();
     setSize(Config.WINDOW_WIDTH, Config.WINDOW_HEIGHT / 2);
-    setLocationRelativeTo(null);
+
 
     pagePanel.setLayout(new GridLayout(3, 2, 10, 10)); // grid layout
 
-    // labels
+    // ----------labels -----------
     JLabel userLabel = new JLabel("Username:");
     JLabel pwdLabel = new JLabel("Password:");
 
-    // text fields
+    // --------- text fields --------
     JTextField userText = new JTextField();
     JPasswordField pwdText = new JPasswordField();
 
-    // button
-    JButton loginButton = new JButton("Login"); // Login button
-
-    // center the button
+    // -------- button ----------
+    JButton loginButton = new JButton("Login"); 
     JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
     buttonPanel.add(loginButton);
 
-    // login click action
+    // ---------- Action Listener ----------
     loginButton.addActionListener(e -> {
       String username = userText.getText().toUpperCase();
       String password = new String(pwdText.getPassword());
@@ -63,28 +59,28 @@ public class LoginPage extends JFrame {
     add(pagePanel, BorderLayout.CENTER);
     add(buttonPanel, BorderLayout.SOUTH);
 
+    setLocationRelativeTo(null);
     setDefaultCloseOperation(EXIT_ON_CLOSE);
   }
 
-  /**
-   * Open dashboard based on role after login.
-   */
+  
+  // Open dashboard based on role after login.
   private void openDashboard(User user) {
     String role = user.getUserRole();
 
-    if (role.equals("Coordinator")) {
+    if (role.equals("Coordinator")) 
+    {
       new CoordinatorDashboard().setVisible(true);
       return;
     }
     if (role.equals("Student"))
     { 
-      // put the student dashboard here, after login will direct to student dashboard
       new StudentDashboard(user).setVisible(true);
       return;
     }
 
-    if (role.equals("Evaluator")) {
-      // pass evaluator ID so EvaluationPage can filter assigned submissions
+    if (role.equals("Evaluator")) 
+    {
       new EvaluationPage(user.getUserID()).setVisible(true);
       return;
     }
@@ -92,11 +88,5 @@ public class LoginPage extends JFrame {
     JOptionPane.showMessageDialog(this, "Unknown role: " + role, "Role Error", JOptionPane.ERROR_MESSAGE);
   }
 
-  /**
-   * Main method so you can run LoginPage directly:
-   * java -cp bin views.LoginPage
-   */
-  public static void main(String[] args) {
-    SwingUtilities.invokeLater(() -> new LoginPage().setVisible(true));
-  }
+
 }

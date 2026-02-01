@@ -1,5 +1,6 @@
 package utils;
 
+import javax.swing.JFrame;
 import views.*;
 
 public class Config {
@@ -34,6 +35,17 @@ public class Config {
     SD.setVisible(true);
 
   }
+
+  public static void backToLogin(JFrame currentFrame){ 
+
+    if (currentFrame != null) //close the current page if exist
+    { 
+      currentFrame.dispose();
+    }
+
+      new LoginPage().setVisible(true);
+    }
+
 
 }
 

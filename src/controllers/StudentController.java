@@ -47,10 +47,17 @@ public class StudentController {
         int nextNum = count + 1;
 
         String subID = "SUB-00" + nextNum;
+        String boardID = "-";
 
-        String seminarID = sessionInfo.split(" \\| ")[0];
+        String seminarID = sessionInfo.split(Config.DELIMITER_READ)[0];
 
         String finalMaterial = (cloudLink == null) ? "null" : cloudLink;
+        
+        if (type.equalsIgnoreCase("Poster"))
+        { 
+            boardID = generateNextBoardID();
+        }
+
 
         // Create Object
         Submission newPres = new Submission(
@@ -60,6 +67,7 @@ public class StudentController {
             abstractText,
             supervisor,
             type,
+            boardID,
             seminarID,
             finalMaterial
         );
@@ -67,4 +75,23 @@ public class StudentController {
         FileHandler.appendData(Config.SUBMISSIONS_FILE, newPres.toFileLine());
         return true;
         }   
+
+    private String generateNextBoardID (){ 
+        
+        SubmissionController sc = new SubmissionController();
+        List<Submission> allSub = sc.getAllSubmissions(); 
+
+        int poster_count = 0;
+        for (Submission s : allSub)
+        { 
+            if ("Poster".equalsIgnoreCase(s.getType()))
+            { 
+                poster_count ++; 
+            }
+        }
+        
+        return String.format("B-%02d", poster_count + 1);
     }
+}
+
+  

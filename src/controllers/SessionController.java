@@ -15,7 +15,7 @@ public class SessionController {
     String sessionID = "SESSION-0" + newSessionID; //SESSION - 01, ...
 
     //create new session object and append to database
-    Session newSession = new Session(sessionID, seminarID, sessionName, sessionDate, sessionTime, sessionVenue, sessionType, "-", "-");
+    Session newSession = new Session(sessionID, seminarID, sessionName, sessionDate, sessionTime, sessionVenue, sessionType, "-", "-", "-");
     FileHandler.appendData(Config.SESSIONS_FILE, newSession.toFileLine());
 
 

@@ -52,6 +52,13 @@ public class ReportController {
     { 
       sb.append (String. format("[ %s ] %s\n", s.getSessionTime(), s.getSessionName())); 
       sb.append("   Venue:     ").append(s.getSessionVenue()).append("\n");
+
+      String bID = s.getBoardID().trim(); 
+      if (bID != null && !bID.equals("-") && !bID.isEmpty()) // make sure boardID is exist 
+      { 
+        sb.append("   Board ID:  ").append(bID).append ("\n");
+      }
+
       sb.append("   Presenter: ").append(s.getPresenter()).append("\n");
       sb.append("--------------------------------------------------\n");
     }
@@ -88,16 +95,18 @@ public class ReportController {
         }
 
         String studentID = s.getPresenter(); 
-        String score = " - ";
-        String comment = " - ";  
+        String score = "-";
+        String comment = "-";  
         
         for (String line : evaluationLines)
         { 
           String [] parts = line.split(Config.DELIMITER_READ); 
-          if (parts.length >= 9 && parts[2].equals(studentID))
+          if (parts.length >= 10 && 
+              parts[2].trim().equals(studentID) &&  //check student ID and seminar ID to prevent overlap 
+              parts[1].trim().equals(seminarID))    //parts[] flw the sequence in evaluation.txt
           {
-            score = parts[8]; //total score in the evaluation.txt, last object in the list
-            comment = parts[7];
+            score = parts[9]; //total score in the evaluation.txt, last object in the list
+            comment = parts[8];
 
             int numScore = Integer.parseInt(score); 
             if (numScore > 10)
@@ -116,9 +125,9 @@ public class ReportController {
         }
 
 
-        sb.append("Student: ").append(studentID).append("\n");
-        sb.append("   Session:  ").append(s.getSessionName()).append("\n");
-        sb.append("   Score:    ").append(score).append("\n");
+        sb.append("   Student:  ").append(studentID).append("\n");
+        sb.append("   Session Name:  ").append(s.getSessionName()).append("\n");
+        sb.append("   Total Score:    ").append(score).append("\n");
         sb.append("   Comments: ").append(comment).append("\n");
         sb.append("----------------------------------------\n");
       }

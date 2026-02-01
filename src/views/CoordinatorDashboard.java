@@ -18,7 +18,7 @@ public class CoordinatorDashboard extends JFrame {
     Dimension btnSize = new Dimension(200, 25); // button size 
 
 
-    //create new sesssion button 
+    //create new seminar button 
     JButton createNewSeminarButton = new JButton("Create New Seminar");
     createNewSeminarButton.setPreferredSize(btnSize);
     //put at first row 
@@ -27,18 +27,25 @@ public class CoordinatorDashboard extends JFrame {
     panel.add(createNewSeminarButton, gbc); 
 
 
-    //view all session button 
+    //view all seminar button 
     JButton viewSeminarButton = new JButton ("View Seminars");
     viewSeminarButton.setPreferredSize(btnSize);
-    //third row
+    //second row
     gbc.gridy = 1;
     panel.add(viewSeminarButton, gbc); 
-                                                                    //wrap the text in the button 
-    JButton reportButton = new JButton("<html><center>View Seminar Schedule <br> And Evaluation Reports</center></html>"); 
+
+    //report button 
+    JButton reportButton = new JButton("<html><center>View Seminar Schedule <br> And Evaluation Reports</center></html>"); //html to wrap the text in the button 
     reportButton.setPreferredSize(new Dimension(200, 35));
+    //third row
     gbc.gridy = 2;
     panel.add(reportButton, gbc);
 
+    //logout button 
+    JButton logoutButton = new JButton("Logout");
+    logoutButton.setPreferredSize(btnSize);
+    gbc.gridy = 3; 
+    panel.add(logoutButton, gbc);
 
     
     //--------------------------- Action listeners ----------------------------
@@ -52,19 +59,22 @@ public class CoordinatorDashboard extends JFrame {
     
     
     viewSeminarButton.addActionListener(e-> { 
+
       SeminarDashboard SD = new SeminarDashboard(); 
-      
       SD.setVisible(true);
       this.setVisible(false);
+
     });
 
     reportButton.addActionListener(e->{ 
-      GenerateReportPage GRP = new GenerateReportPage(); 
 
+      GenerateReportPage GRP = new GenerateReportPage(); 
       GRP.setVisible(true);
       this.setVisible(false);
 
     });
+
+    logoutButton.addActionListener(e-> Config.backToLogin(this));
 
 
 
