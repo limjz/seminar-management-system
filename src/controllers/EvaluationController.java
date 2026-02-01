@@ -9,6 +9,23 @@ import utils.FileHandler;
 
 public class EvaluationController {
 
+    public static List<Evaluation> getAllEvaluaations (){ 
+        List<String> lines = FileHandler.readAllLines(Config.EVALUATIONS_FILE); 
+        List<Evaluation> allEvas = new ArrayList<>() ; 
+
+        for (String line : lines )
+        { 
+            Evaluation e = Evaluation.fromFileLine(line); 
+            if (e != null)
+            { 
+                allEvas.add(e); 
+            }
+        }
+        return allEvas;
+    }
+
+
+
     // Get submissions assigned to evaluator (using assignments.txt)
     public static List<Submission> getAssignedSubmissions(String evaluatorId) {
 
@@ -16,12 +33,19 @@ public class EvaluationController {
         //List<String> assignmentLines = FileHandler.readAllLines(Config.ASSIGNMENTS_FILE);
         List<String> submissionLines = FileHandler.readAllLines(Config.SUBMISSIONS_FILE);
 
-        // collect assigned submission IDs
+        // collect assigned submission IDs from session.txt
         List<String> assignedIds = new ArrayList<>();
         for (String line : sessionLines) {
             String[] parts = line.split(Config.DELIMITER_READ, -1);
-            if (parts.length >= 7 && parts[6].equals(evaluatorId)) {
-                assignedIds.add(parts[7]); // student ID
+            
+            // needs index 7, so length must be >= 8
+            if (parts.length >= 8) {
+                String evaId = parts[7].trim();
+                String studentId = parts[8].trim();
+
+                if (evaId.equalsIgnoreCase(evaluatorId.trim())) {
+                    assignedIds.add(studentId); // student ID
+                }
             }
         }
 
@@ -81,6 +105,10 @@ public class EvaluationController {
         }
         return null;
     }
+
+    
+
+
 }
 
 

@@ -34,31 +34,41 @@ public class RegisterSeminarPage extends JFrame {
         gbc.insets = new Insets(10, 10, 10, 10);
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        // --- Fields ---
-
+        // ------------ Text Fields & Drop Down --------------
         // Title
-        gbc.gridx = 0; gbc.gridy = 0; add(new JLabel("Research Title:"), gbc);
+        gbc.gridx = 0; gbc.gridy = 0; 
+        add(new JLabel("Research Title:"), gbc);
+
         titleField = new JTextField(20);
         gbc.gridx = 1; gbc.gridy = 0; add(titleField, gbc);
 
         // Abstract
-        gbc.gridx = 0; gbc.gridy = 1; add(new JLabel("Abstract:"), gbc);
+        gbc.gridx = 0; gbc.gridy = 1; 
+        add(new JLabel("Abstract:"), gbc);
+
         abstractField = new JTextArea(3, 20);
         JScrollPane scrollAbs = new JScrollPane(abstractField);
         gbc.gridx = 1; gbc.gridy = 1; add(scrollAbs, gbc);
 
         // Supervisor Name
-        gbc.gridx = 0; gbc.gridy = 2; add(new JLabel("Supervisor:"), gbc);
+        gbc.gridx = 0; gbc.gridy = 2; 
+        add(new JLabel("Supervisor:"), gbc);
+
         supervisorField = new JTextField(20);
-        gbc.gridx = 1; gbc.gridy = 2; add(supervisorField, gbc);
+        gbc.gridx = 1; gbc.gridy = 2; 
+        add(supervisorField, gbc);
 
         // Type
-        gbc.gridx = 0; gbc.gridy = 3; add(new JLabel("Type:"), gbc);
+        gbc.gridx = 0; gbc.gridy = 3;
+        add(new JLabel("Type:"), gbc);
+
         typeBox = new JComboBox<>(new String[]{"Oral", "Poster"});
-        gbc.gridx = 1; gbc.gridy = 3; add(typeBox, gbc);
+        gbc.gridx = 1; gbc.gridy = 3; 
+        add(typeBox, gbc);
 
         // Seminar Dropdown
-        gbc.gridx = 0; gbc.gridy = 4; add(new JLabel("Seminar:"), gbc);
+        gbc.gridx = 0; gbc.gridy = 4; 
+        add(new JLabel("Seminar:"), gbc);
         
         // Load seminaar from Controller
         String[] seminars = controller.getAvailableSeminar();
@@ -105,7 +115,7 @@ public class RegisterSeminarPage extends JFrame {
         }
 
             String Link = txtCloudLink.getText().toLowerCase();
-            boolean isValidLink = Link.contains("drive.google.com") || 
+            boolean isValidLink = Link.contains("google.com") || //google drive link
                                   Link.contains("onedrive.live.com") ||
                                   Link.contains("sharepoint.com");
         

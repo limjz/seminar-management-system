@@ -9,18 +9,20 @@ public class Submission {
     private final String abstractText;
     private final String supervisor;
     private final String type;
+    private final String boardID; // only for the poster submission, oral will be null
     private final String seminarID;
     private String material;
 
     // Constructor
     public Submission(String subID, String studentID, String title, String abstractText, 
-                        String supervisor, String type, String seminarID, String material) {
+                        String supervisor, String type, String boardID, String seminarID, String material) {
         this.subID = subID;
         this.studentID = studentID;
         this.title = title;
         this.abstractText = abstractText;
         this.supervisor = supervisor;
         this.type = type;
+        this.boardID = (boardID == null || boardID.isEmpty()) ? "-" : boardID;
         this.seminarID = seminarID;
         this.material = material;
     }
@@ -33,6 +35,7 @@ public class Submission {
                abstractText + Config.DELIMITER_WRITE +
                supervisor + Config.DELIMITER_WRITE +
                type + Config.DELIMITER_WRITE +
+               boardID + Config.DELIMITER_WRITE +
                seminarID + Config.DELIMITER_WRITE +
                material;
     }
@@ -42,7 +45,14 @@ public class Submission {
         String[] parts = line.split(Config.DELIMITER_READ);
         
         // Ensure we have at least 8 parts (even if material is "null")
-        if (parts.length < 8) return null;
+        if (parts.length < 9) return null;
+
+        String bID = " - ";
+
+        if (parts.length >= 9 )
+        { 
+            bID = parts[6].trim();
+        }
 
         return new Submission(
             parts[0], // subID
@@ -51,8 +61,9 @@ public class Submission {
             parts[3], // abstract
             parts[4], // supervisor
             parts[5], // type
-            parts[6], // seminarID
-            parts[7]  // material
+            bID, // boardID
+            parts[7],  // seminarID 
+            parts[8]    // material 
         );
     }
 
@@ -63,8 +74,10 @@ public class Submission {
     public String getAbstractText() { return abstractText; }
     public String getSupervisor() { return supervisor; }
     public String getType() { return type; }
+    public String getBoardID () { return boardID; }
     public String getSeminarID() { return seminarID; }
     public String getMaterial() { return material; }
+
 
     // Setters (Only the ones you might update)
     public void setMaterial(String material) { this.material = material; }

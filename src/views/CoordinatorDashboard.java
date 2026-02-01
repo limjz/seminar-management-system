@@ -15,10 +15,10 @@ public class CoordinatorDashboard extends JFrame {
 
     gbc.insets = new Insets(10, 10, 10, 10); // add spacing between buttons
     gbc.anchor = GridBagConstraints.CENTER; // center the buttons 
-    Dimension btnSize = new Dimension(175, 25); // button size 
+    Dimension btnSize = new Dimension(200, 25); // button size 
 
 
-    //create new sesssion button 
+    //create new seminar button 
     JButton createNewSeminarButton = new JButton("Create New Seminar");
     createNewSeminarButton.setPreferredSize(btnSize);
     //put at first row 
@@ -27,13 +27,26 @@ public class CoordinatorDashboard extends JFrame {
     panel.add(createNewSeminarButton, gbc); 
 
 
-    //view all session button 
+    //view all seminar button 
     JButton viewSeminarButton = new JButton ("View Seminars");
     viewSeminarButton.setPreferredSize(btnSize);
-    //third row
+    //second row
     gbc.gridy = 1;
     panel.add(viewSeminarButton, gbc); 
-    
+
+    //report button 
+    JButton reportButton = new JButton("<html><center>View Seminar Schedule <br> And Evaluation Reports</center></html>"); //html to wrap the text in the button 
+    reportButton.setPreferredSize(new Dimension(200, 35));
+    //third row
+    gbc.gridy = 2;
+    panel.add(reportButton, gbc);
+
+    //logout button 
+    JButton logoutButton = new JButton("Logout");
+    logoutButton.setPreferredSize(btnSize);
+    gbc.gridy = 3; 
+    panel.add(logoutButton, gbc);
+
     
     //--------------------------- Action listeners ----------------------------
     createNewSeminarButton.addActionListener(e -> {
@@ -46,11 +59,23 @@ public class CoordinatorDashboard extends JFrame {
     
     
     viewSeminarButton.addActionListener(e-> { 
+
       SeminarDashboard SD = new SeminarDashboard(); 
-      
       SD.setVisible(true);
       this.setVisible(false);
+
     });
+
+    reportButton.addActionListener(e->{ 
+
+      GenerateReportPage GRP = new GenerateReportPage(); 
+      GRP.setVisible(true);
+      this.setVisible(false);
+
+    });
+
+    logoutButton.addActionListener(e-> Config.backToLogin(this));
+
 
 
     //panel.setBorder(BorderFactory.createEmptyBorder(25,50,25,50));

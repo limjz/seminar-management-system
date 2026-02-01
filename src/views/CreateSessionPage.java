@@ -12,13 +12,11 @@ public class CreateSessionPage extends JDialog {
   private final JTextField titleField; 
   private final DateSelector sessionDateBox;
 
-  //time box 
+  // date drop down  
   private final JComboBox<String> hourBox; 
   private final JComboBox<String> minuteBox; 
   private final JComboBox<String> amPmBox; 
 
-
-  //private final JTextField timeField;
   private final JComboBox <String> sessionVenueBox;
   private final JComboBox <String> sessionTypeBox;
 
@@ -33,14 +31,14 @@ public class CreateSessionPage extends JDialog {
     JPanel buttonPanel = new JPanel (new FlowLayout(FlowLayout.CENTER, 20, 10));
     JPanel timePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5,0));
 
-    // labels for session details
+    // ----------- labels  ---------
     JLabel titleLabel = new JLabel("Session Title");
     JLabel dateLabel = new JLabel("Date (YYYY-MM-DD)");
     JLabel timeLabel = new JLabel("Time");
     JLabel venueLabel = new JLabel("Venue");
     JLabel typeLabel = new JLabel("Sesion Type");
 
-    // text fields for session details
+    // ---------- text fields -------------
     titleField = new JTextField(20);
 
     
@@ -48,7 +46,7 @@ public class CreateSessionPage extends JDialog {
     minuteBox = new JComboBox<>(generateMinutes(15));
     amPmBox = new JComboBox<>(new String[]{"AM", "PM"});
 
-    // choosing option for the date, venue and type of the seminar session 
+    //----------- Session Date, Venue & Type Drop Down----------
     sessionDateBox = new DateSelector();
 
     String [] venueOption = {"DTC", "MPH", "FCI classroom", "FCM classroom"};
@@ -58,16 +56,12 @@ public class CreateSessionPage extends JDialog {
     sessionTypeBox = new JComboBox<>(typeOptions);
 
 
-    // add Create Session button
+    // ----------- Button ------------
     JButton createSessionButton = new JButton("Create Session");
-    // add Back button
     JButton backButton = new JButton ("Back"); 
 
 
-
-
-
-    // -------------------- Action Listener ---------------
+    // --------------- Action Listener ------------------
     createSessionButton.addActionListener(e -> {
       saveSession(seminarID);
     });
@@ -103,7 +97,7 @@ public class CreateSessionPage extends JDialog {
 
     formPanel.setBorder( BorderFactory.createEmptyBorder(20,20,20,20));
 
-    // the filling text field will be on the top of the two button
+    // text field will be on the top of the two button
     add(formPanel, BorderLayout.CENTER);
     add(buttonPanel, BorderLayout.SOUTH);
 
@@ -143,8 +137,6 @@ public class CreateSessionPage extends JDialog {
       }
       
   }
-
-
 
 
   private String[] generateNumber (int start, int end){ 

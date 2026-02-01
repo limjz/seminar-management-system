@@ -5,53 +5,69 @@ import utils.Config;
 public class Evaluation {
 
     private String evaluatorId;
+    private String seminarId; 
+    private String studentId;
     private String submissionId;
     
-
-    private int problemClarity;
-    private int methodology;
-    private int results;
-    private int presentation;
+   
+    //rubrics           //     Poster            Oral
+    private int score1; // Content Quality @ Problem Clarity
+    private int score2; // Visual Design   @ Methodology
+    private int score3; // Organization    @ Results
+    private int score4; // Explanation     @ Presentation
 
     private String comments;
+    private int totalScore;
 
-    public Evaluation(String evaluatorId, String submissionId, 
-                      int problemClarity, int methodology, int results, int presentation,
-                      String comments) {
+
+    public Evaluation(String evaluatorId, String seminarId, String studentId, String submissionId,
+                      int score1, int score2, int score3, int score4,
+                      String comments, int totalScore) 
+    {
         this.evaluatorId = evaluatorId;
+        this.seminarId = seminarId;
+        this.studentId = studentId;
         this.submissionId = submissionId;
-        
-        this.problemClarity = problemClarity;
-        this.methodology = methodology;
-        this.results = results;
-        this.presentation = presentation;
+
+        this.score1 = score1;
+        this.score2 = score2;
+        this.score3 = score3;
+        this.score4 = score4;
+
         this.comments = comments;
+        this.totalScore = totalScore;
     }
+
 
     public String toFileLine() {
         return 
             evaluatorId + Config.DELIMITER_WRITE +
+            seminarId + Config.DELIMITER_WRITE +
+            studentId + Config.DELIMITER_WRITE + 
             submissionId + Config.DELIMITER_WRITE +
-            problemClarity + Config.DELIMITER_WRITE +
-            methodology + Config.DELIMITER_WRITE +
-            results + Config.DELIMITER_WRITE +
-            presentation + Config.DELIMITER_WRITE +
-            comments;
+            score1 + Config.DELIMITER_WRITE +
+            score2 + Config.DELIMITER_WRITE +
+            score3 + Config.DELIMITER_WRITE +
+            score4 + Config.DELIMITER_WRITE +
+            comments + Config.DELIMITER_WRITE + 
+            totalScore;
     }
 
     public static Evaluation fromFileLine(String line) {
-        // split into max 7 parts so comments can contain "|"? (we keep it simple)
-        String[] parts = line.split(Config.DELIMITER_READ, 7);
-        if (parts.length < 7) return null;
+        String[] parts = line.split(Config.DELIMITER_READ);
+        if (parts.length < 10) return null;
 
         return new Evaluation(
-                parts[0],
-                parts[1],
-                parseIntSafe(parts[2]),
-                parseIntSafe(parts[3]),
-                parseIntSafe(parts[4]),
-                parseIntSafe(parts[5]),
-                parts[6]
+                parts[0].trim(), //evaluatorID 
+                parts[1].trim(), //seminarID 
+                parts[2].trim(), //studentID
+                parts[3].trim(), //submissionID
+                parseIntSafe(parts[4]), //score1
+                parseIntSafe(parts[5]), //score2
+                parseIntSafe(parts[6]), //score3
+                parseIntSafe(parts[7]), //score4
+                parts[8].trim(), //comment 
+                parseIntSafe(parts[9]) //totalScore
         );
     }
 
@@ -60,18 +76,18 @@ public class Evaluation {
         catch (Exception e) { return 0; }
     }
 
-    public int getTotalScore() {
-        return problemClarity + methodology + results + presentation;
-    }
-
+    
     // getters
     public String getEvaluatorId() { return evaluatorId; }
+    public String getSeminarId() { return seminarId; }
+    public String getStudentId() {return studentId; }
     public String getSubmissionId() { return submissionId; }
-    public int getProblemClarity() { return problemClarity; }
-    public int getMethodology() { return methodology; }
-    public int getResults() { return results; }
-    public int getPresentation() { return presentation; }
+    public int getScore1() { return score1; }
+    public int getScore2() { return score2; }
+    public int getScore3() { return score3; }
+    public int getScore4() { return score4; }
     public String getComments() { return comments; }
+    public int getTotalScore() {return score1 + score2 + score3 + score4;}
 }
 
 

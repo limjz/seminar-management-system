@@ -31,47 +31,50 @@ public class AssignSessionPage extends JFrame{
     JPanel buttonPanel = new JPanel();
 
 
-
-    //---------------- Seminar Selection --------------------
+    //---------------- Select Seminar Drop Down  --------------------
     JLabel seminarLabel = new JLabel("Select a seminar to assign");
     seminarBox = new JComboBox<>(); 
     loadSeminarList();
-    seminarBox.addActionListener(e->{ 
-      loadSessionList(); 
-    });
 
 
-    // -------------- Session Selection ----------------------
+    // -------------- Select Session Drop Down ----------------------
     JLabel sessionLabel = new JLabel("Select a session to assign:"); 
     sessionBox = new JComboBox<>();
     loadSessionList();
-    sessionBox.addActionListener(e->{ 
-      loadStudentList();
-    });
 
 
-    //---------------- Evaluator Selection -------------------
+
+    //---------------- Select Evaluator Drop Down  -------------------
     JLabel evaluatorLabel = new JLabel("Select assign evaluator: ");
     evaluatorBox = new JComboBox<>(); 
     loadEvaluatorList();
 
-    //---------------- Presenter Selection -------------------
+    //---------------- Select Presenter Drop Down  -------------------
     JLabel presenterLabel = new JLabel("Select assign presenter: ");
     presenterBox = new JComboBox<>(); 
-    
 
-    // save button 
+    //----------- Button -------------
     JButton saveButton = new JButton("Save"); 
+    JButton backButton = new JButton ("Back"); 
+
+    // ------------- Action Listener ------------
+    seminarBox.addActionListener(e->{ 
+      loadSessionList(); 
+    });
+
+    sessionBox.addActionListener(e->{ 
+      loadStudentList();
+    });
+
     saveButton.addActionListener(e-> {
       saveToFile();
     });
-    
-    // Back button
-    JButton backButton = new JButton ("Back"); 
+
     backButton.addActionListener(e -> {
       dispose();
       Config.setSeminarDashboardVsible();
     });
+
 
     boxPanel.add(seminarLabel); 
     boxPanel.add(seminarBox);
@@ -115,7 +118,6 @@ public class AssignSessionPage extends JFrame{
     }
 
   }
-
 
 
   private void loadSessionList ()
@@ -253,11 +255,28 @@ public class AssignSessionPage extends JFrame{
     SessionController sc = new SessionController(); 
     Session targetedSession = sc.getSessionByID(sessionID); 
 
+
+    // get boardID in the submission.txt 
+    String boardIdToSave = "-";
+    SubmissionController sb = new SubmissionController();
+    List <Submission> allSub = sb.getAllSubmissions();
+    
+    for(Submission sub : allSub)
+    { 
+      if (sub.getStudentID().equals(presenterID))
+      { 
+        boardIdToSave = sub.getBoardID(); // put the boardID we generate in submission into session
+        break;
+      }
+    }
+
+
     if (targetedSession != null)
     { 
       // update the assigned presenter and evaluator to the database
       targetedSession.setEvaluator(evaluatorID);
       targetedSession.setPresenter(presenterID);
+      targetedSession.setBoardID(boardIdToSave);
 
       //put all the object into string
       String line = targetedSession.toFileLine(); 

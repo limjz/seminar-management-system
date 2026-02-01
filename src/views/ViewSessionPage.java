@@ -51,7 +51,7 @@ public class ViewSessionPage extends JFrame {
     JScrollPane scrollPane = new JScrollPane(sessionTable);
     add(scrollPane, BorderLayout.CENTER);
 
-    //back button 
+    //-------- button -------
     JButton backButton = new JButton("Back");
     backButton.addActionListener(e -> {
         dispose(); // Close this window

@@ -11,14 +11,13 @@ public class StudentDashboard extends JFrame {
     private User currentUser;
     private final StudentController controller;
 
-    // --- FIX IS HERE: Constructor must accept 'User', not Strings ---
     public StudentDashboard(User user) {
         super("Student Dashboard");
         this.currentUser = user;
         this.controller = new StudentController();
 
         setSize(Config.WINDOW_WIDTH, Config.WINDOW_HEIGHT);
-        setLocationRelativeTo(null);
+
 
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -32,7 +31,7 @@ public class StudentDashboard extends JFrame {
         gbc.gridx = 0; gbc.gridy = 0;
         panel.add(welcomeLabel, gbc);
 
-        // Buttons
+        //---------- Buttons ------------
         JButton registerSeminarButton = new JButton("Register Seminar");
         registerSeminarButton.setPreferredSize(btnSize);
         gbc.gridy = 1;
@@ -48,7 +47,7 @@ public class StudentDashboard extends JFrame {
         gbc.gridy = 3;
         panel.add(logoutButton, gbc);
 
-        // Action Listeners
+        //------------ Action Listeners ------------
         registerSeminarButton.addActionListener(e -> {
             RegisterSeminarPage rsp = new RegisterSeminarPage(currentUser, this);
             rsp.setVisible(true);
@@ -61,9 +60,11 @@ public class StudentDashboard extends JFrame {
              this.setVisible(false); 
         });
 
-        logoutButton.addActionListener(e -> dispose());
+        logoutButton.addActionListener(e -> Config.backToLogin(this));
 
         add(panel);
+        
+        setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
 }
