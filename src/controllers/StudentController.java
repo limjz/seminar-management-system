@@ -41,7 +41,7 @@ public class StudentController {
 
 
     // Register Presentation
-    public boolean registerPresentation(String studentID, String title, String type, String abstractText, String supervisor, String sessionInfo, String filePath) {
+    public boolean registerPresentation(String studentID, String title, String type, String abstractText, String supervisor, String sessionInfo, String cloudLink) {
         
         int count = FileHandler.readAllLines(Config.SUBMISSIONS_FILE).size();
         int nextNum = count + 1;
@@ -50,7 +50,7 @@ public class StudentController {
 
         String seminarID = sessionInfo.split(" \\| ")[0];
 
-        String finalPath = (filePath == null) ? "null" : filePath;
+        String finalMaterial = (cloudLink == null) ? "null" : cloudLink;
 
         // Create Object
         Submission newPres = new Submission(
@@ -61,7 +61,7 @@ public class StudentController {
             supervisor,
             type,
             seminarID,
-            finalPath
+            finalMaterial
         );
 
         FileHandler.appendData(Config.SUBMISSIONS_FILE, newPres.toFileLine());
