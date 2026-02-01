@@ -1,2 +1,1 @@
-SUB-001|STD-001|AI for Healthcare|Oral|slides/ai.pptx
-SUB-002|STD-002|Blockchain Security|Poster|poster/blockchain.png
+

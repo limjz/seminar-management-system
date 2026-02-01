@@ -8,9 +8,11 @@ import utils.FileHandler;
 
 
 public class SubmissionController {
-  public List<Submission> getAllSubmission ()
+
+
+  public List<Submission> getAllSubmissions ()
   {
-    List<Submission> submissionList = new ArrayList<> (); 
+    List<Submission> submissionsList = new ArrayList<> (); 
     List<String> allLines = FileHandler.readAllLines(Config.SUBMISSIONS_FILE);
 
     for (String lines : allLines)
@@ -18,10 +20,27 @@ public class SubmissionController {
       Submission sub = Submission.fromFileLine(lines);
       if (sub != null) // if read smtg then add to the list
       { 
-        submissionList.add(sub);
+        submissionsList.add(sub);
       }
     }
 
-    return submissionList;
+    return submissionsList;
   } 
+
+
+
+  // public List<String> getPresentationsSeminar (String seminarID){ 
+  //   List<Presentation> allPresentations = getAllPresentations(); 
+  //   List<String> filterStudents = new ArrayList<>(); 
+
+  //   for (Presentation p : allPresentations)
+  //   { 
+  //     if (p.getSeminarID().equals(seminarID))
+  //     {
+  //         filterStudents.add(p.getPresID() + " - " + p.getType());
+  //     }
+  //   }
+  //     return filterStudents;
+  // }
+
 }

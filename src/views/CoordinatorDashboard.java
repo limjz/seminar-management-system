@@ -15,63 +15,56 @@ public class CoordinatorDashboard extends JFrame {
 
     gbc.insets = new Insets(10, 10, 10, 10); // add spacing between buttons
     gbc.anchor = GridBagConstraints.CENTER; // center the buttons 
-    Dimension btnSize = new Dimension(175, 25); // button size 
-
+    Dimension btnSize = new Dimension(200, 25); // button size 
 
 
     //create new sesssion button 
-    JButton createNewSessionButton = new JButton("Create New Session");
-    createNewSessionButton.setPreferredSize(btnSize);
+    JButton createNewSeminarButton = new JButton("Create New Seminar");
+    createNewSeminarButton.setPreferredSize(btnSize);
     //put at first row 
     gbc.gridx = 0; 
     gbc.gridy = 0;
-    panel.add(createNewSessionButton, gbc); 
+    panel.add(createNewSeminarButton, gbc); 
 
-    
-    //assign session button
-    JButton assignSessionButton = new JButton ("Assign Session");
-    assignSessionButton.setPreferredSize(btnSize);
-    //second row 
-    gbc.gridy = 1;
-    panel.add(assignSessionButton, gbc);
-    
 
     //view all session button 
-    JButton viewAllSessionButton = new JButton ("View All Sessions");
-    viewAllSessionButton.setPreferredSize(btnSize);
+    JButton viewSeminarButton = new JButton ("View Seminars");
+    viewSeminarButton.setPreferredSize(btnSize);
     //third row
+    gbc.gridy = 1;
+    panel.add(viewSeminarButton, gbc); 
+                                                                    //wrap the text in the button 
+    JButton reportButton = new JButton("<html><center>View Seminar Schedule <br> And Evaluation Reports</center></html>"); 
+    reportButton.setPreferredSize(new Dimension(200, 35));
     gbc.gridy = 2;
-    panel.add(viewAllSessionButton, gbc); 
+    panel.add(reportButton, gbc);
+
+
     
-    
+    //--------------------------- Action listeners ----------------------------
+    createNewSeminarButton.addActionListener(e -> {
 
-
-    //--------------------------- action listeners ----------------------------
-    createNewSessionButton.addActionListener(e -> {
-
-      CreateSession CS = new CreateSession();
+      CreateSeminarPage CS = new CreateSeminarPage();
       CS.setVisible(true);
       this.setVisible(false);
 
     });
     
-    assignSessionButton.addActionListener(e->{ 
-
-      AssignSessionPage AS = new AssignSessionPage();
-      AS.setVisible(true);
-      this.setVisible(false);
-
-    });
     
-    viewAllSessionButton.addActionListener(e-> { 
-      ViewSessionPage VSP = new ViewSessionPage(); 
+    viewSeminarButton.addActionListener(e-> { 
+      SeminarDashboard SD = new SeminarDashboard(); 
       
-      VSP.setVisible(true);
+      SD.setVisible(true);
       this.setVisible(false);
     });
 
+    reportButton.addActionListener(e->{ 
+      GenerateReportPage GRP = new GenerateReportPage(); 
 
+      GRP.setVisible(true);
+      this.setVisible(false);
 
+    });
 
 
 

@@ -11,7 +11,7 @@ import utils.Config;
 
 public class ViewSessionPage extends JFrame {
 
-  public ViewSessionPage() {
+  public ViewSessionPage(JFrame previousScreen) {
     super("All Session Page"); 
     setSize (Config.WINDOW_WIDTH + 100, Config.WINDOW_HEIGHT/2);
     setLocationRelativeTo(null);
@@ -26,7 +26,8 @@ public class ViewSessionPage extends JFrame {
     List<Session> allSession = sc.getAllSession();
 
     //load all data from session.txt to table
-    for (Session session : allSession)
+    if (allSession != null){
+      for (Session session : allSession)
     { 
       String [] rowSessionData = {
         session.getSessionID(),
@@ -40,6 +41,7 @@ public class ViewSessionPage extends JFrame {
       };
 
       model.addRow(rowSessionData);
+      }
     }
 
     // display table 
@@ -51,14 +53,17 @@ public class ViewSessionPage extends JFrame {
 
     //back button 
     JButton backButton = new JButton("Back");
-    backButton.addActionListener(e-> {
-      dispose();
-      Config.setCoordinatorDashboardVsible();
-    });
+    backButton.addActionListener(e -> {
+        dispose(); // Close this window
+        if (previousScreen != null) {
+            previousScreen.setVisible(true); // Go back to WHOEVER opened this (Student or Coordinator)
+        }
+        });
+        
+        JPanel buttonPanel = new JPanel(); 
+        buttonPanel.add(backButton);
+        add(buttonPanel, BorderLayout.SOUTH); 
     
-    JPanel buttonPanel = new JPanel(); 
-    buttonPanel.add(backButton);
-    add (buttonPanel, BorderLayout.SOUTH); 
 
     setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 

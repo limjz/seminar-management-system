@@ -76,9 +76,10 @@ public class LoginPage extends JFrame {
       new CoordinatorDashboard().setVisible(true);
       return;
     }
-
-    if (role.equals("Student")) {
-      JOptionPane.showMessageDialog(this, "Student Dashboard coming soon!");
+    if (role.equals("Student"))
+    { 
+      // put the student dashboard here, after login will direct to student dashboard
+      new StudentDashboard(user).setVisible(true);
       return;
     }
 

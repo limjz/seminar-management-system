@@ -9,7 +9,7 @@ import utils.FileHandler;
 
 public class EvaluationController {
 
-    // 1) Get submissions assigned to evaluator (using assignments.txt)
+    // Get submissions assigned to evaluator (using assignments.txt)
     public static List<Submission> getAssignedSubmissions(String evaluatorId) {
 
         List<String> sessionLines = FileHandler.readAllLines(Config.SESSIONS_FILE);
@@ -23,8 +23,8 @@ public class EvaluationController {
             
             // needs index 7, so length must be >= 8
             if (parts.length >= 8) {
-                String evaId = parts[6].trim();
-                String studentId = parts[7].trim();
+                String evaId = parts[7].trim();
+                String studentId = parts[8].trim();
 
                 if (evaId.equalsIgnoreCase(evaluatorId.trim())) {
                     assignedIds.add(studentId); // student ID
@@ -36,7 +36,7 @@ public class EvaluationController {
         List<Submission> result = new ArrayList<>();
         for (String line : submissionLines) {
             Submission s = Submission.fromFileLine(line);
-            if (s != null && assignedIds.contains(s.getStudentId())) {
+            if (s != null && assignedIds.contains(s.getStudentID())) {
                 result.add(s);
             }
         }
@@ -44,7 +44,7 @@ public class EvaluationController {
         return result;
     }
 
-    // 2) Save or update evaluation in evaluations.txt
+    // Save or update evaluation in evaluations.txt
     public static void saveOrUpdateEvaluation(Evaluation newEval) {
 
         List<String> lines = FileHandler.readAllLines(Config.EVALUATIONS_FILE);
@@ -74,7 +74,7 @@ public class EvaluationController {
         FileHandler.overwriteAll(Config.EVALUATIONS_FILE, updated);
     }
 
-    // 3) Load existing evaluation (if evaluator already graded it)
+    // Load existing evaluation (if evaluator already graded it)
     public static Evaluation getExistingEvaluation(String evaluatorId, String submissionId) {
         List<String> lines = FileHandler.readAllLines(Config.EVALUATIONS_FILE);
 
@@ -88,6 +88,10 @@ public class EvaluationController {
         }
         return null;
     }
+
+    
+
+
 }
 
 

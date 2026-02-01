@@ -58,6 +58,9 @@ public class EvaluationPage extends JFrame {
         initLayout();
         loadAssigned();
         initEvents();
+
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
     /**
@@ -126,7 +129,7 @@ public class EvaluationPage extends JFrame {
         listModel.clear();
 
         for (Submission s : assignedSubmissions) {
-            listModel.addElement(s.getSubmissionId() + " - " + s.getTitle() + " (" + s.getType() + ")");
+            listModel.addElement(s.getSubmissionID() + " - " + s.getTitle() + " (" + s.getType() + ")");
         }
     }
 
@@ -229,6 +232,8 @@ public class EvaluationPage extends JFrame {
         int score4 = (Integer) sp4.getValue();
 
         String comments = txtComments.getText().trim();
+        int totalScore = problem + method + results + present;
+
         if (comments.isEmpty()) comments = "-";
 
         // IMPORTANT: Evaluation constructor order is (evaluatorId, submissionId, ...)
@@ -237,6 +242,11 @@ public class EvaluationPage extends JFrame {
                 selected.getSubmissionId(),
                 score1, score2, score3, score4,
                 comments
+                selected.getSubmissionID(),
+                selected.getStudentID(),
+                problem, method, results, present,
+                comments,
+                totalScore
         );
 
         EvaluationController.saveOrUpdateEvaluation(ev);
