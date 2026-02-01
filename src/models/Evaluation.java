@@ -37,10 +37,6 @@ public class Evaluation {
         this.comments = comments;
         this.totalScore = totalScore;
     }
-    public Evaluation ( )
-    { 
-
-    }
 
 
 
@@ -62,14 +58,14 @@ public class Evaluation {
         if (parts.length < 9) return null;
 
         return new Evaluation(
-                parts[0],
-                parts[1],
-                parts[2],
+                parts[0].trim(),
+                parts[1].trim(),
+                parts[2].trim(),
                 parseIntSafe(parts[3]),
                 parseIntSafe(parts[4]),
                 parseIntSafe(parts[5]),
                 parseIntSafe(parts[6]),
-                parts[7],
+                parts[7].trim(),
                 parseIntSafe(parts[8])
         );
     }
