@@ -10,11 +10,9 @@ import utils.FileHandler;
 
 public class StudentController {
 
-    // Get Available Sessions 
-    // Uses your existing SessionController to get objects cleanly
     public String[] getAvailableSession() {
         SessionController sc = new SessionController();
-        List<Session> allSessions = sc.getAllSession(); // From your SessionController.java
+        List<Session> allSessions = sc.getAllSession(); 
         
         List<String> displayList = new ArrayList<>();
         
@@ -92,6 +90,39 @@ public class StudentController {
         
         return String.format("B-%02d", poster_count + 1);
     }
+        
+public List<Seminar> getStudentRegisteredSeminars(String studentId) {
+    List<Seminar> registeredSeminars = new ArrayList<>();
+    FileHandler fileHandler = new FileHandler();
+    
+    try {
+        // Read all registrations from registration.txt
+        List<String> registrations = fileHandler.readAllLines("data/registration.txt");
+        
+        // Get all seminars
+        SeminarController seminarController = new SeminarController();
+        List<Seminar> allSeminars = seminarController.getAllSeminars();
+        
+        // Filter seminars where student is registered
+        for (String registration : registrations) {
+            String[] parts = registration.split("\\|");
+            if (parts.length >= 2 && parts[1].trim().equals(studentId)) {
+                String seminarId = parts[0].trim();
+                
+                // Find matching seminar
+                for (Seminar seminar : allSeminars) {
+                    if (seminar.getSeminarID().equals(seminarId)) {
+                        registeredSeminars.add(seminar);
+                        break;
+                    }
+                }
+            }
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    
+    return registeredSeminars;
 }
-
-  
+            
+    }

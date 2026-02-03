@@ -6,6 +6,7 @@ import javax.swing.*;
 import models.User;
 import utils.Config;
 
+
 public class StudentDashboard extends JFrame {
 
     private User currentUser;
@@ -37,7 +38,7 @@ public class StudentDashboard extends JFrame {
         gbc.gridy = 1;
         panel.add(registerSeminarButton, gbc);
 
-        JButton getSessionButton = new JButton("Get Session");
+        JButton getSessionButton = new JButton("View Registered Session");
         getSessionButton.setPreferredSize(btnSize);
         gbc.gridy = 2;
         panel.add(getSessionButton, gbc);
@@ -55,8 +56,8 @@ public class StudentDashboard extends JFrame {
         });
 
         getSessionButton.addActionListener(e -> {
-             ViewSessionPage vsp = new ViewSessionPage(this); 
-             vsp.setVisible(true);
+             ViewRegisteredSession vrs = new ViewRegisteredSession(currentUser, this);
+             vrs.setVisible(true);
              this.setVisible(false); 
         });
 
