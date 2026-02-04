@@ -25,7 +25,7 @@ public class StudentDashboard extends JFrame {
 
         gbc.insets = new Insets(10, 10, 10, 10);
         gbc.anchor = GridBagConstraints.CENTER;
-        Dimension btnSize = new Dimension(175, 25);
+        Dimension btnSize = new Dimension(250, 25);
 
         // Display Student Name
         JLabel welcomeLabel = new JLabel("Welcome, " + currentUser.getUserName() + " (" + currentUser.getUserID() + ")");

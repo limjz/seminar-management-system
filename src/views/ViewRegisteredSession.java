@@ -27,7 +27,7 @@ public class ViewRegisteredSession extends JFrame {
         this.controller = new StudentController();
         this.seminarController = new SeminarController();
     
-        setSize(Config.WINDOW_WIDTH + 200, Config.WINDOW_HEIGHT / 2);
+        setSize(Config.WINDOW_WIDTH + 300, Config.WINDOW_HEIGHT / 2);
         setLayout(new BorderLayout());
     
         displayRegisteredSessionTable();
@@ -37,7 +37,11 @@ public class ViewRegisteredSession extends JFrame {
             previousScreen.setVisible(true);
             this.dispose();
         });
-        add(backButton, BorderLayout.SOUTH);
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.add(backButton);
+
+        add(buttonPanel, BorderLayout.SOUTH);
     
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -49,21 +53,27 @@ public class ViewRegisteredSession extends JFrame {
         List<Seminar> registeredSeminars = controller.getStudentRegisteredSeminars(student.getUserID());
         
         // Create table model with columns - added "Time"
-        tableModel = new DefaultTableModel(new String[]{"Seminar ID", "Seminar Name", "Venue", "Date", "Time"}, 0);
-        
+        String[] columnNames = {"Session ID", "Seminar ID", "Seminar Name", "Venue", "Date", "Time", "Eva Id"};
+        tableModel = new DefaultTableModel(columnNames, 0);
+
         // Populate table with only registered seminars
         for (Seminar seminar : registeredSeminars) {
-            // Get venue and time from sessions.txt for this seminar
-            String[] sessionInfo = getSessionInfoBySeminarID(seminar.getSeminarID());
+
+            String[] sessionInfo = getSessionInfoBySeminarID(seminar.getSeminarID(), student.getUserID());
+
             String venue = sessionInfo[0];
             String time = sessionInfo[1];
+            String sessionID = sessionInfo[2];
+            String evaID = sessionInfo[3];
             
             tableModel.addRow(new Object[]{
+                sessionID,
                 seminar.getSeminarID(),
                 seminar.getSeminarTitle(),
                 venue,
                 seminar.getSeminarDate(),
-                time
+                time,
+                evaID
             });
         }
         
@@ -74,23 +84,29 @@ public class ViewRegisteredSession extends JFrame {
         add(scrollPane, BorderLayout.CENTER);
     }
     
-    private String[] getSessionInfoBySeminarID(String seminarID) {
-        String[] info = {"N/A", "N/A"};  // {venue, time}
+    private String[] getSessionInfoBySeminarID(String seminarID, String studentID) {
+        String[] info = {"N/A", "N/A", "N/A", "N/A"};  // {venue, time, sessionID, evaID}
         
         try {
-            // FIX: Called statically instead of creating an object
-            // Consider changing "data/sessions.txt" to Config.SESSIONS_FILE if it exists
             List<String> sessions = FileHandler.readAllLines("data/sessions.txt"); 
             
             for (String session : sessions) {
-                // Using the Config delimiter just in case the separator changes later
                 String[] parts = session.split("\\|"); 
                 
                 // Format: SESSION-ID|SEMINAR-ID|Title|Date|Time|VENUE|Type|Evaluator|Student
-                if (parts.length >= 6 && parts[1].trim().equals(seminarID)) {
-                    info[0] = parts[5].trim();  // Venue at index 5
-                    info[1] = parts[4].trim();  // Time at index 4
-                    return info;
+                // We need to check parts[8] which is the Student ID
+                if (parts.length >= 9) {
+                    String currentSeminarID = parts[1].trim();
+                    String currentStudentID = parts[8].trim();
+
+                    // FIX: Check BOTH SeminarID AND StudentID
+                    if (currentSeminarID.equals(seminarID) && currentStudentID.equals(studentID)) {
+                        info[0] = parts[5].trim();  // Venue at index 5
+                        info[1] = parts[4].trim();  // Time at index 4
+                        info[2] = parts[0].trim();  // Session ID at index 0
+                        info[3] = parts[7].trim();  // Evaluator ID at index 7
+                        return info; // Found the correct session for THIS student
+                    }
                 }
             }
         } catch (Exception e) {
