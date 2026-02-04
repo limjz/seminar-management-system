@@ -41,10 +41,15 @@ public class CoordinatorDashboard extends JFrame {
     gbc.gridy = 2;
     panel.add(reportButton, gbc);
 
+    JButton awardButton = new JButton ("<html><center>View Award Ceremony <br> Schedule </center></html>"); 
+    awardButton.setPreferredSize(new Dimension(200, 35));
+    gbc.gridy = 3;
+    panel.add(awardButton, gbc);
+
     //logout button 
     JButton logoutButton = new JButton("Logout");
     logoutButton.setPreferredSize(btnSize);
-    gbc.gridy = 3; 
+    gbc.gridy = 4; 
     panel.add(logoutButton, gbc);
 
     
@@ -73,6 +78,15 @@ public class CoordinatorDashboard extends JFrame {
       this.setVisible(false);
 
     });
+
+    awardButton.addActionListener(e-> { 
+      
+      AwardCeremonyPage ACP = new AwardCeremonyPage(); 
+      ACP.setVisible(true);
+      this.setVisible(false);
+
+    });
+
 
     logoutButton.addActionListener(e-> Config.backToLogin(this));
 
