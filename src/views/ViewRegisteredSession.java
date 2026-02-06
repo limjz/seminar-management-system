@@ -49,14 +49,14 @@ public class ViewRegisteredSession extends JFrame {
     }
     
     private void displayRegisteredSessionTable() {
-        // Get seminars the student is registered to
+        // Get seminars 
         List<Seminar> registeredSeminars = controller.getStudentRegisteredSeminars(student.getUserID());
         
-        // Create table model with columns - added "Time"
+        // table 
         String[] columnNames = {"Session ID", "Seminar ID", "Seminar Name", "Venue", "Date", "Time", "Eva Id"};
         tableModel = new DefaultTableModel(columnNames, 0);
 
-        // Populate table with only registered seminars
+        // get student's registered to seminar only
         for (Seminar seminar : registeredSeminars) {
 
             String[] sessionInfo = getSessionInfoBySeminarID(seminar.getSeminarID(), student.getUserID());
@@ -94,7 +94,6 @@ public class ViewRegisteredSession extends JFrame {
                 String[] parts = session.split("\\|"); 
                 
                 // Format: SESSION-ID|SEMINAR-ID|Title|Date|Time|VENUE|Type|Evaluator|Student
-                // We need to check parts[8] which is the Student ID
                 if (parts.length >= 9) {
                     String currentSeminarID = parts[1].trim();
                     String currentStudentID = parts[8].trim();
@@ -105,7 +104,7 @@ public class ViewRegisteredSession extends JFrame {
                         info[1] = parts[4].trim();  // Time at index 4
                         info[2] = parts[0].trim();  // Session ID at index 0
                         info[3] = parts[7].trim();  // Evaluator ID at index 7
-                        return info; // Found the correct session for THIS student
+                        return info; 
                     }
                 }
             }

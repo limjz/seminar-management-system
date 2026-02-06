@@ -116,8 +116,8 @@ public class RegisterSeminarPage extends JFrame {
 
             String Link = txtCloudLink.getText().toLowerCase();
             boolean isValidLink = Link.contains("google.com") || //google drive link
-                                  Link.contains("onedrive.live.com") ||
-                                  Link.contains("sharepoint.com");
+                                  Link.contains("onedrive.live.com") || // onedrive link
+                                  Link.contains("sharepoint.com"); // sharepoint link
         
         if (!isValidLink) {
             JOptionPane.showMessageDialog(this, "Please provide a valid link.");
@@ -131,12 +131,12 @@ public class RegisterSeminarPage extends JFrame {
             return;
         }
 
-        // Extract IDs
+        // get IDs
         String seminarID = selectedSeminarRaw.split(" - ")[0].trim(); 
         String studentID = student.getUserID();
 
 
-        // Update submission.txt
+        // update submission.txt
         controller.registerPresentation(
             studentID,
             titleField.getText(),
@@ -147,14 +147,14 @@ public class RegisterSeminarPage extends JFrame {
             txtCloudLink.getText()
         );
 
-        // Update registration.txt
+        // update registration.txt
         SeminarController semC = new SeminarController(); 
 
-        // This boolean tells us if the file write actually happened
+        // make sure student is registered to seminar
         semC.registerStudent(studentID, seminarID);
 
 
-        // 6. Show User Message
+        // Show Message
         String msg = "Presentation Submitted Successfully!";
 
         JOptionPane.showMessageDialog(this, msg);
