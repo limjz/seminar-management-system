@@ -25,10 +25,10 @@ public class EvaluationPage extends JFrame {
     private final JLabel lblFileLink = new JLabel("<html>File: -</html>");
 
     // Rubric labels (change these depending on Oral/Poster)
-    private final JLabel lbl1 = new JLabel("Problem Clarity (0-5):");
-    private final JLabel lbl2 = new JLabel("Methodology (0-5):");
-    private final JLabel lbl3 = new JLabel("Results (0-5):");
-    private final JLabel lbl4 = new JLabel("Presentation (0-5):");
+    private final JLabel lbl1 = new JLabel("Rubrics 1");
+    private final JLabel lbl2 = new JLabel("Rubrics 2");
+    private final JLabel lbl3 = new JLabel("Rubrics 3");
+    private final JLabel lbl4 = new JLabel("Rubrics 4");
 
     // Rubric inputs (0 - 5)
     private final JSpinner sp1 = new JSpinner(new SpinnerNumberModel(0, 0, 25, 1));
@@ -197,16 +197,16 @@ public class EvaluationPage extends JFrame {
 
         if (type.equalsIgnoreCase("Poster")) {
             // Poster rubric (example criteria)
-            lbl1.setText("Content Quality (0-5):");
-            lbl2.setText("Visual Design (0-5):");
-            lbl3.setText("Organization (0-5):");
-            lbl4.setText("Explanation / Q&A (0-5):");
+            lbl1.setText("Content Quality (0-25):");
+            lbl2.setText("Visual Design (0-25):");
+            lbl3.setText("Organization (0-25):");
+            lbl4.setText("Explanation / Q&A (0-25):");
         } else {
             // Oral rubric (default)
-            lbl1.setText("Problem Clarity (0-5):");
-            lbl2.setText("Methodology (0-5):");
-            lbl3.setText("Results (0-5):");
-            lbl4.setText("Presentation (0-5):");
+            lbl1.setText("Problem Clarity (0-25):");
+            lbl2.setText("Methodology (0-25):");
+            lbl3.setText("Results (0-25):");
+            lbl4.setText("Presentation (0-25):");
         }
     }
 

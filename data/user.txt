@@ -3,3 +3,4 @@ STD-001|ali|11111|Student
 STD-002|agao|2222|Student
 EVA-001|mutu|3333|Evaluator
 EVA-002|ilie|321321|Evaluator
+STD-003|khoo|0000|Student

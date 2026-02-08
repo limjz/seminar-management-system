@@ -109,7 +109,7 @@ public class ReportController {
             comment = parts[8];
 
             int numScore = Integer.parseInt(score); 
-            if (numScore > 10)
+            if (numScore > 40) // 40 marks to pass
             { 
               passed ++;
             }

@@ -30,7 +30,7 @@ public class AwardCeremonyPage extends JFrame {
         top.add(seminarBox);
         add(top, BorderLayout.NORTH);
 
-        //-----------  DisplayText Area ---------
+        //-----------  DisplayText Area --------- 
         displayArea = new JTextArea();
         displayArea.setFont(new Font("Monospaced", Font.BOLD, 14));
         displayArea.setEditable(false);
@@ -40,14 +40,21 @@ public class AwardCeremonyPage extends JFrame {
         //----------- Button --------------
         JPanel bot = new JPanel();
         JButton generateButton = new JButton("Generate Agenda");
-        JButton closeButton = new JButton("Close");
+        // JButton closeButton = new JButton("Close");
+
+        JButton backButton = new JButton("Back"); 
+
 
         //----------- Action Listener -------------
         generateButton.addActionListener(e -> generateAgenda());
-        closeButton.addActionListener(e -> dispose());
+        backButton.addActionListener(e -> {      
+            dispose();
+            Config.setCoordinatorDashboardVsible();
+        });
 
+        bot.add(backButton);
         bot.add(generateButton);
-        bot.add(closeButton);
+        
         add(bot, BorderLayout.SOUTH);
         
         setLocationRelativeTo(null);

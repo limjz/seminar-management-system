@@ -12,7 +12,7 @@ public class SeminarController {
   public static boolean createSeminar(String title, String date ) {
     // Auto generate seminarID based on number of existing sessions
     int newSeminarID = FileHandler.readAllLines(Config.SEMINARS_FILE).size() + 1;
-    String seminarID = "SESSION-0" + newSeminarID; //SESSION - 01, ...
+    String seminarID = "SEM-00" + newSeminarID; //SEM-001, ...
 
     //create new session object and append to database
 
